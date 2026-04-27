@@ -1,210 +1,199 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>⚡ SATS PLINKO ⚡</title>
 
-  <meta property="og:title" content="⚡ SATS PLINKO — 라이트닝 사츠로 대박 플린코!">
-  <meta property="og:description" content="무료 드롭 20회! 사츠 베팅해서 1000x 잭팟 노려보세요 ⚡">
-  <meta property="og:image" content="https://ck121212195.github.io/og-image-plinko.png">
+  <meta property="og:title" content="⚡ SATS PLINKO — Lightning Sats Jackpot!">
+  <meta property="og:description" content="Drop Sats and aim for 1000x multipliers! Free welcome drops included.">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0f0a1f;
-      --panel: #1a1438;
+      --bg: #0a001f;
       --accent: #ff00aa;
       --gold: #ffd700;
       --cyan: #00ffff;
-      --pink: #ff6ec4;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: linear-gradient(180deg, #0f0a1f 0%, #2a1b5c 100%);
+      background: linear-gradient(180deg, #0a001f 0%, #2a0a5c 100%);
       color: #fff;
-      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      font-family: 'Press Start 2P', system-ui, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 80px;
+      padding: 0;
       display: flex;
       flex-direction: column;
     }
 
     .header {
+      background: linear-gradient(#ff00aa, #aa00ff);
+      padding: 15px 0;
       text-align: center;
-      padding: 20px 16px 10px;
-      background: rgba(0,0,0,0.6);
-      border-bottom: 4px solid var(--accent);
-      position: relative;
+      box-shadow: 0 4px 20px rgba(255,0,170,0.6);
     }
 
     .title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(24px, 8vw, 42px);
-      background: linear-gradient(90deg, #ff00aa, #ffd700, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px #ff00aa;
-      letter-spacing: 4px;
+      font-size: clamp(28px, 9vw, 48px);
+      color: #fff;
+      text-shadow: 0 0 20px #ffd700, 0 0 40px #ff00aa;
+      letter-spacing: 6px;
     }
 
     .subtitle {
       font-size: 14px;
-      color: #ccc;
-      margin-top: 8px;
+      color: #ffd700;
+      margin-top: 6px;
     }
 
     .container {
       max-width: 480px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 12px;
       flex: 1;
     }
 
-    .balance-panel {
-      background: var(--panel);
-      border: 3px solid var(--gold);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
+    .balance-bar {
       display: flex;
+      background: rgba(0,0,0,0.7);
+      border: 4px solid #ffd700;
+      border-radius: 16px;
+      padding: 14px 20px;
+      margin-bottom: 16px;
       justify-content: space-between;
-      box-shadow: 0 0 25px rgba(255,215,0,0.3);
+      box-shadow: 0 0 30px #ffd700;
     }
 
-    .bal-left, .bal-right {
+    .bal {
       text-align: center;
     }
 
     .bal-label {
       font-size: 10px;
       color: #aaa;
-      letter-spacing: 1px;
     }
 
     .bal-value {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 22px;
-      font-weight: bold;
+      font-size: 24px;
+      color: #00ffff;
     }
 
-    .free-banner {
-      background: linear-gradient(90deg, #4a1b6b, #6b1b4a);
-      border: 2px solid #ff00aa;
-      border-radius: 12px;
-      padding: 12px;
+    .welcome {
+      background: linear-gradient(90deg, #ffd700, #ffaa00);
+      color: #000;
       text-align: center;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
       margin-bottom: 16px;
-      font-size: 13px;
-      color: #fff;
-      box-shadow: 0 0 15px #ff00aa;
+      box-shadow: 0 0 25px #ffd700;
     }
 
-    .game-area {
-      background: #0a0519;
-      border: 4px solid #4a32a0;
-      border-radius: 18px;
+    .game-wrapper {
+      background: #000;
+      border: 6px solid #ff00aa;
+      border-radius: 20px;
       overflow: hidden;
-      margin-bottom: 16px;
       position: relative;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+      margin-bottom: 16px;
+      box-shadow: 0 15px 50px rgba(255,0,170,0.5);
     }
 
     canvas {
       display: block;
       width: 100%;
       height: auto;
-      max-height: 520px;
     }
 
     .controls {
-      background: var(--panel);
+      background: rgba(20,10,50,0.95);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 16px;
     }
 
-    .bet-buttons {
+    .bet-group {
       display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .bet-btn {
       flex: 1;
-      padding: 14px 8px;
-      background: #2a1f5a;
-      border: 2px solid #555;
-      border-radius: 10px;
+      padding: 14px 10px;
+      background: #1a0f38;
+      border: 3px solid #555;
+      border-radius: 12px;
       color: #fff;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .bet-btn.active {
-      border-color: var(--gold);
+      border-color: #ffd700;
       background: #3a2a7a;
-      box-shadow: 0 0 15px var(--gold);
+      box-shadow: 0 0 20px #ffd700;
     }
 
-    .drop-btn {
+    .drop-button {
       width: 100%;
-      padding: 18px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 18px;
-      background: linear-gradient(135deg, #ffd700, #ffaa00);
+      padding: 20px;
+      font-size: 22px;
+      background: linear-gradient(#ffd700, #ffaa00);
       color: #000;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
+      box-shadow: 0 8px 0 #b87800;
       cursor: pointer;
-      box-shadow: 0 6px 0 #b87800;
       margin-bottom: 12px;
     }
 
-    .drop-btn:active {
-      transform: translateY(4px);
+    .drop-button:active {
+      transform: translateY(6px);
       box-shadow: 0 2px 0 #b87800;
     }
 
-    .settings-row {
+    .settings {
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
 
     select {
       flex: 1;
-      padding: 10px;
-      background: #1a1438;
+      padding: 12px;
+      background: #1a0f38;
       color: #ffd700;
-      border: 2px solid #4a32a0;
-      border-radius: 8px;
+      border: 3px solid #4a32a0;
+      border-radius: 10px;
       font-size: 13px;
     }
 
     .result {
       text-align: center;
-      min-height: 48px;
-      font-family: 'Press Start 2P', monospace;
       font-size: 18px;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 8px 0;
+      padding: 16px;
+      min-height: 60px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.6);
+      margin-bottom: 16px;
     }
 
-    .win { color: #2eff8a; text-shadow: 0 0 20px #2eff8a; }
-    .jackpot { color: #ffd700; animation: jackpotPulse 0.6s infinite alternate; }
+    .win { color: #2eff8a; text-shadow: 0 0 25px #2eff8a; }
+    .jackpot { color: #ffd700; animation: flash 0.4s infinite alternate; }
 
-    @keyframes jackpotPulse {
-      from { text-shadow: 0 0 10px #ffd700; }
-      to { text-shadow: 0 0 40px #ffd700, 0 0 60px #ff00aa; }
+    @keyframes flash {
+      from { text-shadow: 0 0 15px #ffd700; }
+      to { text-shadow: 0 0 50px #ffd700, 0 0 80px #ff00aa; }
     }
 
-    .lb-panel {
-      background: var(--panel);
+    .lb {
+      background: rgba(20,10,50,0.95);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 20px;
@@ -212,558 +201,375 @@
 
     .lb-title {
       text-align: center;
-      color: var(--gold);
-      font-family: 'Press Start 2P', monospace;
+      color: #ffd700;
       margin-bottom: 12px;
-      font-size: 15px;
     }
 
     .lb-row {
       display: flex;
-      align-items: center;
-      padding: 10px 12px;
-      background: rgba(255,215,0,0.08);
+      padding: 10px;
+      background: rgba(255,215,0,0.1);
+      margin-bottom: 8px;
       border-radius: 8px;
-      margin-bottom: 6px;
-    }
-
-    .lb-rank {
-      width: 32px;
-      font-size: 18px;
-      text-align: center;
-    }
-
-    .lb-name {
-      flex: 1;
-      font-size: 14px;
-    }
-
-    .lb-score {
-      font-family: 'Press Start 2P', monospace;
-      color: var(--gold);
     }
 
     .howto {
-      background: var(--panel);
-      border-radius: 16px;
+      background: rgba(20,10,50,0.8);
       padding: 16px;
+      border-radius: 16px;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.5;
       color: #ddd;
     }
 
-    .footer-links {
+    .footer {
       text-align: center;
-      padding: 20px 16px;
+      padding: 20px;
       color: #888;
       font-size: 13px;
-    }
-
-    .footer-links a {
-      color: var(--cyan);
-      text-decoration: none;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(10,5,25,0.95);
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .modal-content {
-      background: #1a1438;
-      border: 4px solid var(--pink);
-      border-radius: 20px;
-      width: 90%;
-      max-width: 380px;
-      padding: 30px 24px;
-      text-align: center;
-    }
-
-    .lang-switch {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 100;
-      background: rgba(0,0,0,0.5);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
     }
   </style>
 </head>
 <body>
 
-<div class="lang-switch">
-  <select onchange="changeLanguage(this.value)" style="background:transparent;color:#ffd700;border:none;">
-    <option value="ko">🇰🇷 KO</option>
-    <option value="ja">🇯🇵 JA</option>
-    <option value="en">🇺🇸 EN</option>
-  </select>
-</div>
-
 <div class="header">
-  <div class="title">⚡ SATS PLINKO ⚡</div>
-  <div class="subtitle" id="subtitle">라이트닝 사츠로 플린코 대박!</div>
+  <div class="title">SATS PLINKO</div>
+  <div class="subtitle">LIGHTNING NETWORK JACKPOT</div>
 </div>
 
 <div class="container">
 
-  <!-- Balance -->
-  <div class="balance-panel">
-    <div class="bal-left">
+  <div class="balance-bar">
+    <div class="bal">
       <div class="bal-label">BALANCE</div>
       <div class="bal-value" id="balance">30000</div>
-      <small style="color:#2eff8a">SATS</small>
     </div>
-    <div class="bal-right">
-      <div class="bal-label">SESSION WON</div>
-      <div class="bal-value" id="session-won" style="color:#ffd700">0</div>
-      <small style="color:#ffd700">SATS</small>
+    <div class="bal">
+      <div class="bal-label">WON</div>
+      <div class="bal-value" id="won" style="color:#ffd700">0</div>
     </div>
   </div>
 
-  <!-- Free Banner -->
-  <div class="free-banner">
-    🎁 첫 20 드롭은 <strong>완전 무료</strong>!<br>지금 바로 시작해서 대박 노려보세요 ⚡
+  <div class="welcome">
+    WELCOME BONUS<br>
+    <span style="font-size:28px;color:#000">20 FREE DROPS</span>
   </div>
 
-  <!-- Game Canvas -->
-  <div class="game-area">
-    <canvas id="canvas" width="460" height="520"></canvas>
+  <div class="game-wrapper">
+    <canvas id="canvas" width="460" height="560"></canvas>
   </div>
 
-  <!-- Controls -->
   <div class="controls">
-    <div class="bet-buttons">
-      <button class="bet-btn" data-bet="500" onclick="setBet(500)">500 SATS</button>
-      <button class="bet-btn active" data-bet="1000" onclick="setBet(1000)">1,000 SATS</button>
-      <button class="bet-btn" data-bet="5000" onclick="setBet(5000)">5,000 SATS</button>
+    <div class="bet-group">
+      <button class="bet-btn active" onclick="setBet(500)">500</button>
+      <button class="bet-btn" onclick="setBet(1000)">1,000</button>
+      <button class="bet-btn" onclick="setBet(5000)">5,000</button>
     </div>
 
-    <button class="drop-btn" id="drop-btn" onclick="dropBall()">드롭하기 ⚡</button>
+    <button class="drop-button" onclick="dropBall()">DROP BALL ⚡</button>
 
-    <div class="settings-row">
-      <select id="row-select" onchange="updateSettings()">
-        <option value="12">12행 (안정형)</option>
-        <option value="14">14행</option>
-        <option value="16" selected>16행 (최대 1000x)</option>
+    <div class="settings">
+      <select id="rows" onchange="resetGame()">
+        <option value="12">12 ROWS</option>
+        <option value="14">14 ROWS</option>
+        <option value="16" selected>16 ROWS (1000x)</option>
       </select>
-      <select id="risk-select" onchange="updateSettings()">
-        <option value="low">Low Risk</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High Risk (대박)</option>
+      <select id="risk" onchange="resetGame()">
+        <option value="low">LOW RISK</option>
+        <option value="medium" selected>MEDIUM</option>
+        <option value="high">HIGH RISK</option>
       </select>
     </div>
   </div>
 
-  <div class="result" id="result">드롭을 기다리고 있습니다...</div>
+  <div class="result" id="result">PRESS DROP TO START</div>
 
-  <!-- Leaderboard -->
-  <div class="lb-panel">
-    <div class="lb-title">🏆 역대 최고 기록 TOP 5</div>
+  <div class="lb">
+    <div class="lb-title">🏆 ALL-TIME TOP 5</div>
     <div id="leaderboard"></div>
   </div>
 
-  <!-- How to -->
   <div class="howto">
-    <strong>플레이 방법</strong><br>
-    • 무료 드롭 20회로 시작<br>
-    • 사츠 베팅 후 드롭 버튼 클릭<br>
-    • 높은 배율 슬롯에 떨어지면 대박!<br>
-    • 잔고가 부족하면 Lightning으로 충전 ⚡
+    • Drop your Sats<br>
+    • Watch the ball bounce through the pegs<br>
+    • Land in high multiplier slots for massive wins!<br>
+    • Powered by Lightning Network
   </div>
 
 </div>
 
-<div class="footer-links">
-  ← <a href="https://ck121212195.github.io/LNbits_slot2/">Lightning Slot</a> &nbsp; | &nbsp; 
-  <a href="https://ck121212195.github.io/Bitcoin-Run/">Bitcoin Run →</a>
-</div>
-
-<!-- Share Modal -->
-<div class="modal" id="share-modal">
-  <div class="modal-content">
-    <h2 style="color:#ffd700;margin-bottom:20px;">대박 공유하기!</h2>
-    <p id="share-text" style="margin:20px 0; line-height:1.5;"></p>
-    <button onclick="shareToX()" style="background:#1da1f2;color:white;padding:14px 30px;border:none;border-radius:12px;font-size:15px;margin:10px;">🐦 X (Twitter)에 공유</button>
-    <button onclick="closeShareModal()" style="background:#333;color:white;padding:14px 30px;border:none;border-radius:12px;font-size:15px;margin:10px;">닫기</button>
-  </div>
+<div class="footer">
+  ← <a href="https://ck121212195.github.io/LNbits_slot2/" style="color:#00ffff">Lightning Slot</a> | 
+  <a href="https://ck121212195.github.io/Bitcoin-Run/" style="color:#00ffff">Bitcoin Run →</a>
 </div>
 
 <script>
-// ==================== LANGUAGE ====================
-const translations = {
-  ko: {
-    title: "⚡ SATS PLINKO ⚡",
-    subtitle: "라이트닝 사츠로 플린코 대박!",
-    balance: "BALANCE",
-    session: "SESSION WON",
-    drop: "드롭하기 ⚡",
-    resultReady: "드롭을 기다리고 있습니다...",
-    resultWin: "당첨! +",
-    resultJackpot: "🎉 1000x 잭팟!!"
-  },
-  ja: {
-    title: "⚡ SATS PLINKO ⚡",
-    subtitle: "ライトニングサツで大当たりプラinko！",
-    balance: "残高",
-    session: "今回の獲得",
-    drop: "ドロップ ⚡",
-    resultReady: "ドロップを待っています...",
-    resultWin: "当たり！ +",
-    resultJackpot: "🎉 1000x ジャックポット!!"
-  },
-  en: {
-    title: "⚡ SATS PLINKO ⚡",
-    subtitle: "Lightning Sats Plinko Jackpot!",
-    balance: "BALANCE",
-    session: "SESSION WON",
-    drop: "DROP ⚡",
-    resultReady: "Waiting for drop...",
-    resultWin: "WIN! +",
-    resultJackpot: "🎉 1000x JACKPOT!!"
-  }
-};
+// Matter.js setup
+const { Engine, Render, World, Bodies, Body, Events, Runner, Composite } = Matter;
 
-let currentLang = "ko";
-
-// ==================== GAME STATE ====================
+let engine;
+let runner;
+let world;
+let canvas, ctx;
+let pegs = [];
+let dividers = [];
+let balls = [];
+let currentBet = 1000;
 let balance = 30000;
 let sessionWon = 0;
-let currentBet = 1000;
 let rows = 16;
-let riskLevel = "medium";
+let risk = "medium";
+
+const multipliers = [0.5, 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 500, 250, 100, 50, 25, 10];
 
 let leaderboard = [
-  {name: "익명플레이어754", sats: 12000},
-  {name: "사츠킹", sats: 8500},
-  {name: "플린코러", sats: 6200},
-  {name: "비트코인러브", sats: 4500},
-  {name: "대박러", sats: 3100}
+  {name: "SATS KING", sats: 24500},
+  {name: "PLINKO GOD", sats: 18200},
+  {name: "BITCOIN DROP", sats: 13700},
+  {name: "LIGHTNING WIN", sats: 9800},
+  {name: "JACKPOT HUNTER", sats: 7600}
 ];
 
-// ==================== CANVAS & PHYSICS (簡易だが視覚的に派手) ====================
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = 460;
-canvas.height = 520;
+// Initialize Matter.js
+function initMatter() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
 
-let pegs = [];
-let balls = [];
-let particles = [];
+  engine = Engine.create();
+  world = engine.world;
+  runner = Runner.create();
 
-class Ball {
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.x = canvas.width / 2 + (Math.random() * 60 - 30);
-    this.y = 50;
-    this.vx = (Math.random() - 0.5) * 3;
-    this.vy = 3.5;
-    this.radius = 13;
-    this.bet = currentBet;
-    this.landed = false;
-    this.slot = -1;
-  }
+  // Walls
+  const wallOptions = { isStatic: true, render: { fillStyle: '#4a32a0' } };
+  World.add(world, [
+    Bodies.rectangle(canvas.width/2, -10, canvas.width, 20, wallOptions), // top
+    Bodies.rectangle(canvas.width/2, canvas.height + 10, canvas.width, 20, wallOptions), // bottom
+    Bodies.rectangle(-10, canvas.height/2, 20, canvas.height, wallOptions), // left
+    Bodies.rectangle(canvas.width + 10, canvas.height/2, 20, canvas.height, wallOptions) // right
+  ]);
+
+  createPegsAndDividers();
+  Runner.run(runner, engine);
+  requestAnimationFrame(renderLoop);
 }
 
-function createPegs() {
+function createPegsAndDividers() {
+  // Clear previous
+  Composite.clear(world, false);
+
   pegs = [];
-  const spacingY = 32;
+  const spacingY = 34;
   const startY = 90;
+
   for (let r = 0; r < rows; r++) {
     const y = startY + r * spacingY;
-    const offset = (r % 2) * 18;
-    const count = 11 + (r % 2);
-    for (let c = 0; c < count; c++) {
-      const x = 50 + offset + c * 36;
-      pegs.push({x, y, r: 7});
+    const offset = (r % 2 === 0) ? 0 : 18;
+    const cols = 11 + (r % 2);
+
+    for (let c = 0; c < cols; c++) {
+      const x = 55 + offset + c * 36;
+      const peg = Bodies.circle(x, y, 8, {
+        isStatic: true,
+        render: { fillStyle: '#c084fc' }
+      });
+      pegs.push(peg);
+      World.add(world, peg);
     }
   }
-}
 
-function drawBackground() {
-  ctx.fillStyle = '#0a0519';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Neon glow lines
-  ctx.strokeStyle = 'rgba(255, 0, 170, 0.15)';
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 8; i++) {
-    ctx.beginPath();
-    ctx.moveTo(0, 80 + i*55);
-    ctx.lineTo(canvas.width, 80 + i*55);
-    ctx.stroke();
-  }
-}
-
-function drawPegs() {
-  for (let p of pegs) {
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = '#c084fc';
-    ctx.fillStyle = '#c084fc';
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-}
-
-function drawSlots() {
-  const slotCount = rows + 1;
-  const slotW = (canvas.width - 80) / slotCount;
-  const multTable = [0.5,1,2,5,10,25,50,100,250,500,1000,500,250,100,50,25,10];
-
-  for (let i = 0; i < slotCount; i++) {
-    const x = 40 + i * slotW;
-    let mult = multTable[i] || 5;
-    if (riskLevel === "low") mult = Math.max(0.5, mult * 0.6);
-    if (riskLevel === "high") mult *= 1.3;
-
-    const color = mult >= 500 ? "#ffd700" : mult >= 50 ? "#ff6ec4" : "#00ffff";
-
-    ctx.fillStyle = color;
-    ctx.fillRect(x, canvas.height - 78, slotW - 6, 68);
-
-    ctx.fillStyle = "#000";
-    ctx.font = "bold 13px 'Press Start 2P'";
-    ctx.textAlign = "center";
-    ctx.fillText(mult.toFixed(1)+"x", x + slotW/2 - 3, canvas.height - 45);
-  }
-}
-
-function draw() {
-  drawBackground();
-  drawPegs();
-  drawSlots();
-
-  // Balls
-  ctx.shadowBlur = 25;
-  for (let ball of balls) {
-    ctx.fillStyle = '#ffaa00'; // Bitcoin Orange
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
-    ctx.fill();
-
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 4;
-    ctx.stroke();
-  }
-  ctx.shadowBlur = 0;
-
-  // Particles
-  for (let i = particles.length-1; i >= 0; i--) {
-    const p = particles[i];
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, 7, 7);
-    p.x += p.vx;
-    p.y += p.vy;
-    p.life -= 0.03;
-    if (p.life <= 0) particles.splice(i,1);
-  }
-  ctx.globalAlpha = 1;
-}
-
-function updatePhysics() {
-  for (let i = balls.length - 1; i >= 0; i--) {
-    const b = balls[i];
-    if (b.landed) continue;
-
-    b.vy += 0.22; // gravity
-    b.x += b.vx;
-    b.y += b.vy;
-
-    // Peg collision (simple bounce)
-    for (let p of pegs) {
-      const dx = b.x - p.x;
-      const dy = b.y - p.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist < b.radius + p.r && b.vy > 0) {
-        b.vx += dx * 0.12 + (Math.random()-0.5)*2.5;
-        b.vy = -b.vy * 0.62;
-        b.y = p.y - b.radius - 2;
-      }
-    }
-
-    // Wall bounce
-    if (b.x < 35 || b.x > canvas.width - 35) b.vx *= -0.8;
-
-    // Land
-    if (b.y > canvas.height - 85) {
-      b.landed = true;
-      b.y = canvas.height - 85;
-      const slotIndex = Math.floor((b.x - 35) / ((canvas.width - 70) / (rows + 1)));
-      b.slot = Math.max(0, Math.min(rows, slotIndex));
-      handleLanding(b);
-    }
-  }
-}
-
-function gameLoop() {
-  updatePhysics();
-  draw();
-  requestAnimationFrame(gameLoop);
-}
-
-// ==================== LANDING LOGIC ====================
-function handleLanding(ball) {
-  let mult = [0.5,1,2,5,10,25,50,100,250,500,1000,500,250,100,50,25,10][ball.slot] || 5;
-  if (riskLevel === "low") mult *= 0.65;
-  if (riskLevel === "high") mult *= 1.35;
-
-  const win = Math.floor(ball.bet * mult);
-
-  balance += win;
-  sessionWon += win;
-
-  document.getElementById('balance').textContent = Math.floor(balance).toLocaleString();
-  document.getElementById('session-won').textContent = Math.floor(sessionWon).toLocaleString();
-
-  let msgEl = document.getElementById('result');
-
-  if (mult >= 300) {
-    msgEl.textContent = translations[currentLang].resultJackpot + " " + win.toLocaleString() + " SATS";
-    msgEl.className = "result jackpot";
-    createBigWinParticles(ball.x, ball.y);
-    showShareModal(win, mult);
-  } else if (win > ball.bet) {
-    msgEl.textContent = translations[currentLang].resultWin + win.toLocaleString() + " SATS";
-    msgEl.className = "result win";
-  } else {
-    msgEl.textContent = "아쉽게... 다시 도전!";
-    msgEl.className = "result";
-  }
-
-  updateLeaderboard(win);
-}
-
-// Big win particles
-function createBigWinParticles(x, y) {
-  for (let i = 0; i < 80; i++) {
-    particles.push({
-      x: x,
-      y: y,
-      vx: (Math.random() - 0.5) * 14,
-      vy: (Math.random() - 0.5) * 14 - 5,
-      life: 1.2,
-      color: ["#ffd700","#ff6ec4","#00ffff"][Math.floor(Math.random()*3)]
+  // Bottom dividers / slots
+  dividers = [];
+  const slotWidth = (canvas.width - 80) / (rows + 1);
+  for (let i = 0; i <= rows; i++) {
+    const x = 40 + i * slotWidth;
+    const divider = Bodies.rectangle(x + slotWidth/2, canvas.height - 55, 6, 120, {
+      isStatic: true,
+      render: { fillStyle: '#4a32a0' }
     });
+    dividers.push(divider);
+    World.add(world, divider);
   }
-}
-
-// ==================== UI FUNCTIONS ====================
-function setBet(amount) {
-  currentBet = amount;
-  document.querySelectorAll('.bet-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.bet) === amount);
-  });
 }
 
 function dropBall() {
   if (balance < currentBet) {
-    alert("사츠가 부족합니다! Lightning으로 충전하세요 ⚡");
+    alert("Not enough SATS! Deposit more via Lightning.");
     return;
   }
 
   balance -= currentBet;
-  document.getElementById('balance').textContent = Math.floor(balance).toLocaleString();
+  updateUI();
 
-  const ball = new Ball();
-  balls.push(ball);
-
-  document.getElementById('result').textContent = "⚡ 떨어지는 중...";
-  document.getElementById('result').className = "result";
-}
-
-function updateSettings() {
-  rows = parseInt(document.getElementById('row-select').value);
-  riskLevel = document.getElementById('risk-select').value;
-  createPegs();
-}
-
-function updateLeaderboard(newWin) {
-  leaderboard.unshift({
-    name: "플레이어" + Math.floor(Math.random()*900 + 100),
-    sats: newWin
-  });
-  leaderboard.sort((a,b) => b.sats - a.sats);
-  leaderboard = leaderboard.slice(0,5);
-
-  renderLeaderboard();
-}
-
-function renderLeaderboard() {
-  const container = document.getElementById('leaderboard');
-  let html = '';
-  const emojis = ['👑','🥈','🥉','4️⃣','5️⃣'];
-
-  leaderboard.forEach((entry, i) => {
-    html += `
-      <div class="lb-row">
-        <div class="lb-rank">${emojis[i]}</div>
-        <div class="lb-name">${entry.name}</div>
-        <div class="lb-score">${entry.sats.toLocaleString()} sats</div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function changeLanguage(lang) {
-  currentLang = lang;
-  document.getElementById('subtitle').textContent = translations[lang].subtitle;
-  document.getElementById('drop-btn').textContent = translations[lang].drop;
-  document.getElementById('result').textContent = translations[lang].resultReady;
-}
-
-// ==================== SHARE TO X ====================
-function showShareModal(winAmount, mult) {
-  const modal = document.getElementById('share-modal');
-  const textEl = document.getElementById('share-text');
-
-  let shareText = `⚡ SATS PLINKO 대박 터졌다!!\n\n${winAmount.toLocaleString()} SATS (${mult.toFixed(1)}x)\n\n사츠로 플린코 즐기고 있어요! 너도 와서 대박 노려봐 ⚡\nhttps://ck121212195.github.io/Plinko-Bitcoin/`;
-
-  textEl.textContent = shareText;
-  modal.style.display = 'flex';
-}
-
-function closeShareModal() {
-  document.getElementById('share-modal').style.display = 'none';
-}
-
-function shareToX() {
-  const text = document.getElementById('share-text').textContent;
-  const url = "https://ck121212195.github.io/Plinko-Bitcoin/";
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-  closeShareModal();
-}
-
-// ==================== INIT ====================
-function init() {
-  createPegs();
-  renderLeaderboard();
-
-  document.getElementById('balance').textContent = balance.toLocaleString();
-  document.getElementById('session-won').textContent = sessionWon.toLocaleString();
-
-  // Demo drop
-  setTimeout(() => {
-    if (balls.length === 0) {
-      const demoBall = new Ball();
-      balls.push(demoBall);
+  const ball = Bodies.circle(
+    canvas.width / 2 + (Math.random() * 80 - 40),
+    60,
+    13,
+    {
+      restitution: 0.65,
+      friction: 0.01,
+      density: 0.8,
+      render: { fillStyle: '#ffaa00' }
     }
+  );
+
+  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 4, y: 6 });
+  balls.push(ball);
+  World.add(world, ball);
+
+  // Listen for collision with bottom area
+  Events.on(engine, 'collisionStart', (event) => {
+    event.pairs.forEach(pair => {
+      if (balls.includes(pair.bodyA) || balls.includes(pair.bodyB)) {
+        const ballBody = balls.includes(pair.bodyA) ? pair.bodyA : pair.bodyB;
+        if (ballBody.position.y > canvas.height - 120) {
+          handleLanding(ballBody);
+        }
+      }
+    });
+  });
+}
+
+function handleLanding(ball) {
+  // Remove from world after landing
+  setTimeout(() => {
+    World.remove(world, ball);
+    const idx = balls.indexOf(ball);
+    if (idx > -1) balls.splice(idx, 1);
   }, 800);
 
-  gameLoop();
+  const slot = Math.floor((ball.position.x - 35) / ((canvas.width - 70) / (rows + 1)));
+  let mult = multipliers[Math.max(0, Math.min(multipliers.length-1, slot))] || 5;
+
+  if (risk === "low") mult = Math.max(0.5, mult * 0.6);
+  if (risk === "high") mult *= 1.4;
+
+  const win = Math.floor(currentBet * mult);
+
+  balance += win;
+  sessionWon += win;
+
+  updateUI();
+
+  const resultEl = document.getElementById('result');
+  if (mult >= 500) {
+    resultEl.innerHTML = `🎉 JACKPOT!<br>+${win.toLocaleString()} SATS (${mult.toFixed(0)}x)`;
+    resultEl.className = "result jackpot";
+    createExplosion(ball.position.x, ball.position.y);
+  } else if (win > currentBet * 3) {
+    resultEl.innerHTML = `BIG WIN!<br>+${win.toLocaleString()} SATS`;
+    resultEl.className = "result win";
+  } else if (win > 0) {
+    resultEl.textContent = `WIN +${win.toLocaleString()} SATS`;
+    resultEl.className = "result win";
+  } else {
+    resultEl.textContent = "BETTER LUCK NEXT TIME";
+    resultEl.className = "result";
+  }
+
+  if (win > 5000) {
+    // Trigger share prompt
+    setTimeout(() => {
+      if (confirm("Amazing win! Share on X?")) {
+        shareWin(win, mult);
+      }
+    }, 1200);
+  }
 }
 
-window.onload = init;
+function createExplosion(x, y) {
+  for (let i = 0; i < 120; i++) {
+    const p = Bodies.circle(x, y, 4 + Math.random()*6, {
+      isStatic: false,
+      restitution: 0.9
+    });
+    Body.setVelocity(p, {
+      x: (Math.random() - 0.5) * 18,
+      y: (Math.random() - 0.5) * 18 - 5
+    });
+    World.add(world, p);
+    setTimeout(() => World.remove(world, p), 1800);
+  }
+}
+
+function renderLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background glow
+  ctx.fillStyle = '#0a001f';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw pegs
+  ctx.fillStyle = '#c084fc';
+  pegs.forEach(peg => {
+    ctx.beginPath();
+    ctx.arc(peg.position.x, peg.position.y, 8, 0, Math.PI*2);
+    ctx.fill();
+  });
+
+  // Draw balls
+  ctx.shadowBlur = 25;
+  ctx.shadowColor = '#ffaa00';
+  balls.forEach(ball => {
+    ctx.fillStyle = '#ffaa00';
+    ctx.beginPath();
+    ctx.arc(ball.position.x, ball.position.y, 13, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+  });
+  ctx.shadowBlur = 0;
+
+  requestAnimationFrame(renderLoop);
+}
+
+function updateUI() {
+  document.getElementById('balance').textContent = Math.floor(balance).toLocaleString();
+  document.getElementById('won').textContent = Math.floor(sessionWon).toLocaleString();
+}
+
+function setBet(amount) {
+  currentBet = amount;
+  document.querySelectorAll('.bet-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === amount));
+}
+
+function resetGame() {
+  rows = parseInt(document.getElementById('rows').value);
+  risk = document.getElementById('risk').value;
+  createPegsAndDividers();
+}
+
+function shareWin(win, mult) {
+  const text = `⚡ Just hit ${mult.toFixed(0)}x in SATS PLINKO!\nWon ${win.toLocaleString()} SATS 🔥\nTry it yourself → https://ck121212195.github.io/Plinko-Bitcoin/ #Bitcoin #LightningNetwork`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+// Init
+window.onload = () => {
+  initMatter();
+  updateUI();
+
+  // Demo ball
+  setTimeout(() => {
+    const demoBall = Bodies.circle(canvas.width/2, 60, 13, { restitution: 0.65, render: { fillStyle: '#ffaa00' }});
+    Body.setVelocity(demoBall, {x: 2, y: 5});
+    balls.push(demoBall);
+    World.add(world, demoBall);
+  }, 600);
+
+  renderLeaderboard();
+};
+
+function renderLeaderboard() {
+  const html = leaderboard.map((entry, i) => `
+    <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,215,0,0.08);margin-bottom:6px;border-radius:6px;">
+      <span>${['👑','🥈','🥉','4','5'][i] || i+1}</span>
+      <span>${entry.name}</span>
+      <span style="color:#ffd700">${entry.sats.toLocaleString()} sats</span>
+    </div>
+  `).join('');
+  document.getElementById('leaderboard').innerHTML = html;
+}
 </script>
 </body>
 </html>
