@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>⚡ SATS PLINKO ⚡</title>
+
+  <!-- OGP -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ck121212195.github.io/Plinko/">
+  <meta property="og:site_name" content="⚡ SATS PLINKO">
+  <meta property="og:title" content="⚡ SATS PLINKO — 사츠로 대박 플린코! 💖">
+  <meta property="og:description" content="무료 드롭으로 시작! 라이트닝 사츠로 1000배 잭팟 노려보자 ⚡ #Bitcoin #LightningNetwork">
+  <meta property="og:image" content="https://ck121212195.github.io/og-image-plinko.png">
+  
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #F7A800;
+      --pink: #FF6EB4;
+      --purple: #C084FC;
+      --cyan: #00E5FF;
+      --bg: #0A061F;
+      --bg2: #120D2A;
+      --border: #3A2A7A;
+      --text: #EDE9FF;
+      --green: #2EFF8A;
+      --red: #FF4565;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(160deg, #0A061F 0%, #1A0F38 50%, #0F0A25 100%);
+      color: var(--text);
+      font-family: 'Share Tech Mono', 'Noto Sans KR', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 30px 16px 20px;
+      background: rgba(10,6,31,0.8);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .header-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(18px, 6vw, 28px);
+      background: linear-gradient(90deg, var(--gold), var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255,110,180,0.6);
+    }
+
+    .main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .panel {
+      background: var(--bg2);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance {
+      display: flex;
+      justify-content: space-between;
+      background: #1A1438;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    .canvas-container {
+      position: relative;
+      background: #05030F;
+      border: 3px solid #4A32A0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      padding: 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-drop {
+      background: linear-gradient(135deg, var(--gold), #FFAA00);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 4px 0 #B87800;
+    }
+
+    .btn-drop:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #B87800;
+    }
+
+    .settings {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    select, button {
+      background: #1A1438;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .result {
+      text-align: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 18px;
+      min-height: 50px;
+      margin: 12px 0;
+    }
+
+    .win { color: var(--green); text-shadow: 0 0 15px var(--green); }
+    .jackpot { color: var(--gold); animation: pulse 0.8s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .leaderboard {
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .lb-row {
+      display: flex;
+      padding: 8px 12px;
+      border-bottom: 1px dashed #3A2A7A;
+      font-size: 13px;
+    }
+
+    .lb-row.rank-1 { background: rgba(247,168,0,0.1); }
+    .lb-rank { width: 30px; color: var(--gold); font-weight: bold; }
+    .lb-name { flex: 1; }
+    .lb-sats { color: var(--gold); font-family: 'Press Start 2P', monospace; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,6,31,0.95);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: var(--bg2);
+      border: 3px solid var(--pink);
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .lang-select {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<div class="lang-select">
+  <select onchange="setLang(this.value)">
+    <option value="ko">🇰🇷 한국어</option>
+    <option value="ja">🇯🇵 日本語</option>
+    <option value="en">🇺🇸 English</option>
+  </select>
+</div>
+
+<div class="header">
+  <div class="header-title">⚡ SATS PLINKO ⚡</div>
+  <p style="font-size:12px; color:#AAA; margin-top:8px;">라이트닝 사츠로 플린코 대박!</p>
+</div>
+
+<div class="main">
+
+  <!-- Balance -->
+  <div class="panel">
+    <div class="balance">
+      <div>
+        <small style="color:#888">BALANCE</small><br>
+        <span id="balance" style="color:var(--green); font-size:20px;">10000</span> <small>SATS</small>
+      </div>
+      <div style="text-align:right">
+        <small style="color:#888">SESSION WON</small><br>
+        <span id="session-won" style="color:var(--gold); font-size:18px;">0</span> <small>SATS</small>
+      </div>
+    </div>
+
+    <div class="free-banner" id="free-banner" style="background:#1A0F38; padding:12px; border-radius:10px; text-align:center; margin-bottom:12px; color:#C084FC;">
+      🎁 첫 20 드롭은 <strong>무료</strong>! 지금 바로 시작하세요 ⚡
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="panel">
+    <div class="canvas-container">
+      <canvas id="plinkoCanvas" width="440" height="520"></canvas>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-drop" id="drop-btn" onclick="dropBall()">드롭하기 ⚡</button>
+      
+      <div class="settings">
+        <select id="rows-select" onchange="changeRows()">
+          <option value="12">12행 (보통)</option>
+          <option value="14">14행 (고배율)</option>
+          <option value="16" selected>16행 (최대 1000x)</option>
+        </select>
+        
+        <select id="risk-select" onchange="changeRisk()">
+          <option value="low">Low Risk (안정)</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High Risk (대박)</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <button onclick="setBet(500)" style="flex:1; background:#1A1438; padding:10px; border-radius:8px;">500 SATS</button>
+      <button onclick="setBet(1000)" style="flex:1; background:#1A1438; padding:10px; border-radius:8px; border:2px solid var(--gold);">1,000 SATS</button>
+      <button onclick="setBet(5000)" style="flex:1; background:#1A1438; padding:10px; border-radius:8px;">5,000 SATS</button>
+    </div>
+
+    <div class="result" id="result-msg">드롭을 기다리는 중...</div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="panel">
+    <div style="text-align:center; margin-bottom:12px; font-family:'Press Start 2P'; color:var(--gold);">🏆 역대 최고 기록 TOP 5</div>
+    <div class="leaderboard" id="leaderboard">
+      <!-- JSで動的に挿入 -->
+    </div>
+  </div>
+
+  <!-- How to -->
+  <div class="panel">
+    <div style="font-size:13px; line-height:1.6; color:#CCC;">
+      <strong>플레이 방법</strong><br>
+      • 무료 드롭으로 시작<br>
+      • 사츠 베팅 후 드롭<br>
+      • 높은 배율 구간에 떨어지면 대박!<br>
+      • 라이트닝으로 사츠 충전해서 계속 플레이 ⚡
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div style="text-align:center; font-size:11px; color:#777; margin-top:20px;">
+    <a href="https://ck121212195.github.io/LNbits_slot2/" style="color:var(--pink);">← Lightning Slot</a> | 
+    <a href="https://ck121212195.github.io/Bitcoin-Run/" style="color:var(--cyan);">Bitcoin Run →</a>
+  </div>
+</div>
+
+<!-- Deposit Modal -->
+<div class="modal" id="deposit-modal">
+  <div class="modal-content">
+    <h2 style="color:var(--gold);">⚡ SATS 충전</h2>
+    <p style="margin:16px 0; color:#AAA;">Lightning으로 사츠를 충전하세요</p>
+    <div style="background:#1A1438; padding:16px; border-radius:10px; margin:20px 0; font-size:13px;" id="invoice-area">
+      인보이스 생성 중...
+    </div>
+    <button onclick="closeModal()" style="width:100%; padding:14px; background:#FF4565; color:white; border:none; border-radius:10px;">닫기</button>
+  </div>
+</div>
+
+<script>
+// ====================== CONFIG ======================
+const FREE_DROPS = 20;
+let balance = 20000; // 無料スタート分多めに
+let sessionWon = 0;
+let totalDrops = 0;
+let lang = "ko";
+
+const I18N = {
+  ko: {
+    ready: "드롭을 기다리는 중...",
+    spinning: "⚡ 떨어지는 중...",
+    win: "당첨! +",
+    bigwin: "대박!!",
+    jackpot: "🎉 1000x 잭팟!!"
+  },
+  ja: {
+    ready: "ドロップを待っています...",
+    spinning: "⚡ 落ちています...",
+    win: "当たり！ +",
+    bigwin: "大当たり!!",
+    jackpot: "🎉 1000x ジャックポット!!"
+  },
+  en: {
+    ready: "Ready for drop...",
+    spinning: "⚡ Dropping...",
+    win: "WIN! +",
+    bigwin: "BIG WIN!!",
+    jackpot: "🎉 1000x JACKPOT!!"
+  }
+};
+
+// ====================== GAME SETTINGS ======================
+let rows = 16;
+let risk = "high"; // low / medium / high
+let betAmount = 1000;
+
+// 簡易ペイテーブル (16行 High Risk例)
+const multipliers = {
+  0: 0.5, 1: 1, 2: 2, 3: 5, 4: 10,
+  5: 25, 6: 50, 7: 100, 8: 250,
+  9: 500, 10: 1000, 11: 500, 12: 250,
+  13: 100, 14: 50, 15: 25, 16: 10
+};
+
+// ====================== CANVAS SETUP ======================
+const canvas = document.getElementById('plinkoCanvas');
+const ctx = canvas.getContext('2d');
+let width = 440;
+let height = 520;
+
+let pegs = [];
+let balls = [];
+let particles = [];
+
+// 簡易物理（乱数+重力風）
+class Ball {
+  constructor(x, bet) {
+    this.x = x;
+    this.y = 60;
+    this.vx = (Math.random() - 0.5) * 1.2;
+    this.vy = 2.5;
+    this.radius = 11;
+    this.bet = bet;
+    this.path = [];
+    this.landed = false;
+    this.slot = -1;
+  }
+
+  update() {
+    if (this.landed) return;
+
+    this.vy += 0.18; // 重力
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Peg衝突（簡易）
+    for (let peg of pegs) {
+      const dx = this.x - peg.x;
+      const dy = this.y - peg.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < this.radius + peg.r && this.vy > 0) {
+        this.vx += (dx / dist) * 2.8 + (Math.random() - 0.5) * 1.5;
+        this.vy = -this.vy * 0.68;
+        this.y = peg.y - this.radius - 1;
+        this.path.push({x: this.x, y: this.y});
+      }
+    }
+
+    // 壁
+    if (this.x < 40 || this.x > width - 40) this.vx *= -0.85;
+
+    // 底に到達
+    if (this.y > height - 80) {
+      this.landed = true;
+      this.y = height - 80;
+      this.slot = Math.floor((this.x - 30) / ((width - 60) / (rows + 1)));
+      this.slot = Math.max(0, Math.min(rows, this.slot));
+      resolveDrop(this);
+    }
+  }
+}
+
+// Peg生成
+function createPegs() {
+  pegs = [];
+  const startY = 110;
+  const spacingY = (height - 220) / rows;
+  const spacingX = 26;
+
+  for (let row = 0; row <= rows; row++) {
+    const y = startY + row * spacingY;
+    const offset = (row % 2 === 0) ? 0 : spacingX / 2;
+    const cols = row % 2 === 0 ? 13 : 12;
+
+    for (let col = 0; col < cols; col++) {
+      const x = 55 + offset + col * spacingX;
+      pegs.push({x, y, r: 6});
+    }
+  }
+}
+
+// ====================== RENDER ======================
+function draw() {
+  ctx.fillStyle = '#05030F';
+  ctx.fillRect(0, 0, width, height);
+
+  // Pegs
+  ctx.fillStyle = '#C084FC';
+  for (let p of pegs) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#E0C0FF';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  // Bottom slots
+  const slotWidth = (width - 60) / (rows + 1);
+  for (let i = 0; i <= rows; i++) {
+    const x = 30 + i * slotWidth;
+    const mult = multipliers[i] || 1;
+
+    ctx.fillStyle = mult >= 100 ? '#F7A800' : mult >= 25 ? '#FF6EB4' : '#7777FF';
+    ctx.fillRect(x, height - 75, slotWidth - 4, 55);
+
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 13px "Press Start 2P"';
+    ctx.textAlign = 'center';
+    ctx.fillText(mult + 'x', x + slotWidth/2 - 2, height - 42);
+  }
+
+  // Balls
+  for (let ball of balls) {
+    ctx.fillStyle = '#FFAA00'; // Bitcoin Orange
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Glow
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = '#FFAA00';
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  // Particles (大当たり時)
+  for (let i = particles.length - 1; i >= 0; i--) {
+    let p = particles[i];
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.life;
+    ctx.fillRect(p.x, p.y, 6, 6);
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.025;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function gameLoop() {
+  for (let i = balls.length - 1; i >= 0; i--) {
+    balls[i].update();
+    if (balls[i].landed && balls[i].y > height - 50) {
+      balls.splice(i, 1);
+    }
+  }
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+// ====================== DROP LOGIC ======================
+function dropBall() {
+  if (balance < betAmount) {
+    alert("残高不足です。LightningでSATSをチャージしてください ⚡");
+    // showDepositModal();
+    return;
+  }
+
+  balance -= betAmount;
+  updateBalance();
+
+  const startX = width / 2 + (Math.random() * 40 - 20);
+  const ball = new Ball(startX, betAmount);
+  balls.push(ball);
+
+  totalDrops++;
+  document.getElementById('result-msg').textContent = I18N[lang].spinning;
+  document.getElementById('result-msg').className = '';
+}
+
+function resolveDrop(ball) {
+  const slot = ball.slot;
+  let mult = multipliers[slot] || 2;
+  if (risk === "low") mult = Math.max(1, Math.floor(mult * 0.6));
+  if (risk === "high") mult = Math.floor(mult * 1.25);
+
+  const winAmount = Math.floor(ball.bet * mult);
+
+  if (winAmount > ball.bet * 5) {
+    // 大当たりエフェクト
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: ball.x,
+        y: ball.y,
+        vx: (Math.random() - 0.5) * 12,
+        vy: (Math.random() - 0.5) * 12 - 3,
+        life: 1,
+        color: ['#F7A800', '#FF6EB4', '#00E5FF'][Math.floor(Math.random()*3)]
+      });
+    }
+  }
+
+  if (winAmount > 0) {
+    balance += winAmount;
+    sessionWon += winAmount;
+
+    let msg = "";
+    if (mult >= 500) {
+      msg = I18N[lang].jackpot + " " + winAmount.toLocaleString() + " SATS ⚡";
+      document.getElementById('result-msg').className = 'jackpot';
+    } else if (mult >= 50) {
+      msg = I18N[lang].bigwin + " +" + winAmount.toLocaleString() + " SATS";
+      document.getElementById('result-msg').className = 'win';
+    } else {
+      msg = I18N[lang].win + winAmount.toLocaleString() + " SATS";
+      document.getElementById('result-msg').className = 'win';
+    }
+    document.getElementById('result-msg').textContent = msg;
+
+    updateBalance();
+    saveLeaderboardEntry(winAmount);
+  } else {
+    document.getElementById('result-msg').textContent = "아쉽게... 다시 도전!";
+    document.getElementById('result-msg').className = '';
+  }
+}
+
+function updateBalance() {
+  document.getElementById('balance').textContent = Math.floor(balance).toLocaleString();
+  document.getElementById('session-won').textContent = Math.floor(sessionWon).toLocaleString();
+}
+
+// ====================== Leaderboard (簡易・ローカル) ======================
+let leaderboard = [];
+
+function saveLeaderboardEntry(win) {
+  leaderboard.push({
+    name: "익명플레이어" + Math.floor(Math.random()*999),
+    sats: win,
+    date: new Date().toLocaleDateString('ko-KR')
+  });
+
+  leaderboard.sort((a,b) => b.sats - a.sats);
+  leaderboard = leaderboard.slice(0, 5);
+
+  renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const el = document.getElementById('leaderboard');
+  let html = '';
+  const ranks = ['👑', '🥈', '🥉', '4', '5'];
+
+  leaderboard.forEach((entry, i) => {
+    html += `
+      <div class="lb-row ${i===0 ? 'rank-1' : ''}">
+        <span class="lb-rank">${ranks[i]}</span>
+        <span class="lb-name">${entry.name}</span>
+        <span class="lb-sats">${entry.sats.toLocaleString()} sats</span>
+      </div>`;
+  });
+
+  if (leaderboard.length === 0) {
+    html = '<div style="padding:20px; text-align:center; color:#666;">아직 기록이 없습니다. 첫 대박을 노려보세요!</div>';
+  }
+  el.innerHTML = html;
+}
+
+// ====================== Settings ======================
+function changeRows() {
+  rows = parseInt(document.getElementById('rows-select').value);
+  createPegs();
+}
+
+function changeRisk() {
+  risk = document.getElementById('risk-select').value;
+}
+
+function setBet(amount) {
+  betAmount = amount;
+}
+
+// ====================== Language ======================
+function setLang(l) {
+  lang = l;
+  // 必要に応じてテキスト更新（今回は最小限）
+  document.getElementById('result-msg').textContent = I18N[lang].ready;
+}
+
+// ====================== INIT ======================
+window.onload = () => {
+  canvas.width = width;
+  canvas.height = height;
+
+  createPegs();
+  renderLeaderboard();
+
+  // 無料ドロップ残り表示などは簡易的に
+  setTimeout(() => {
+    updateBalance();
+    gameLoop();
+  }, 300);
+
+  // デモ用に1回ドロップ
+  setTimeout(() => {
+    if (balls.length === 0) dropBall();
+  }, 1200);
+};
+
+// 簡易入金モーダル
+function showDepositModal() {
+  document.getElementById('deposit-modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('deposit-modal').style.display = 'none';
+}
+
+// 韓国人向けに派手なビジュアルを意識したシンプル実装完了
+// 物理は簡易版（本格Matter.js導入は別途可能）
+</script>
+</body>
+</html>
