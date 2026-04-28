@@ -8,7 +8,6 @@
   <!-- ==========================================
        👇 ここに Google Analytics (gtag) を設定 👇
   =========================================== -->
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MYW872C1Y2"></script>
   <script>
     window.dataLayer = window.dataLayer ||[];
@@ -767,7 +766,7 @@ function initMatter() {
 
   getPegPositions().forEach(({ x, y }) => {
     const p = Bodies.circle(x, y, PEG_PHYS, {
-      isStatic: true, restitution: 0.6, friction: 0, label: 'peg'
+      isStatic: true, restitution: 0.25, friction: 0.05, label: 'peg'
     });
     pegs.push(p);
     World.add(world, p);
@@ -810,21 +809,21 @@ function spawnBall() {
   updateUI();
 
   const ball = Bodies.circle(
-    W / 2 + (Math.random() - 0.5) * 18,
+    W / 2 + (Math.random() - 0.5) * 4,
     18,
     BALL_PHYS,
     {
-      restitution: 0.4,
-      friction: 0.005,
-      frictionAir: 0.012,
-      density: 1.0,
+      restitution: 0.25,
+      friction: 0.001,
+      frictionAir: 0.025,
+      density: 1.2,
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
       _bet: actualBet
     }
   );
-  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 2, y: 5 });
+  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.4, y: 1.5 });
   physicalBalls.push(ball);
   World.add(world, ball);
 
