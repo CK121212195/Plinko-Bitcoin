@@ -26,12 +26,12 @@
   <meta property="og:site_name" content="PLINKO ⚡️ Lightning Sats">
   <meta property="og:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
   <meta property="og:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
-  <meta property="og:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.jpg">
+  <meta property="og:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png">
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
   <meta name="twitter:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
-  <meta name="twitter:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.jpg">
+  <meta name="twitter:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png">
 
   <link rel="icon" type="image/png" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png" sizes="32x32">
   <link rel="apple-touch-icon" sizes="180x180" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png">
@@ -675,7 +675,7 @@ function fetchLeaderboard() {
     }
     const top5 = board.slice(0, 5);
     const ranks =['gold','silver','bronze','',''];
-    const rankNum = ['1','2','3','4','5'];
+    const rankNum =['1','2','3','4','5'];
     el.innerHTML = top5.map((e,i) =>
       `<div class="lb-item">
         <span class="lb-rank ${ranks[i]}">${rankNum[i]}</span>
@@ -709,8 +709,10 @@ const BOARD_TOP = 55;
 const SLOT_H    = 48;
 const SLOT_Y    = H - SLOT_H - 6;
 
-const MULT     =[0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2];
-const SLOT_COL =['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
+// ── HOUSE EDGE TABLE ─────────────────────────────────────────
+// 確率の低い「端」を高倍率に、確率の高い「中央」を低倍率に設定。EV ≈ 0.59x (House Edge ~41%)
+const MULT     =[20,  8.0, 2.0, 1.0, 0.5, 0.5, 0.2, 0.5, 0.5, 1.0, 2.0, 8.0, 20];
+const SLOT_COL =['#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee'];
 
 // ── STATE ──────────────────────────────────────────────────────
 let balance    = 0;
