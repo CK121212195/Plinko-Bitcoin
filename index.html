@@ -91,14 +91,14 @@
     .mode-btn .sub{display:block;font-family:'Rajdhani',sans-serif;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-top:2px}
     .mode-btn.active{background:rgba(255,107,0,.2);border-color:var(--orange);color:var(--yellow);box-shadow:0 0 16px rgba(255,107,0,.3)}
     .mode-btn.auto-on{background:rgba(10,255,238,.15);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(10,255,238,.25)}
-    .bet-section{background:var(--bg-card);border-radius:12px;padding:14px 16px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05)}
+    .bet-section{background:var(--bg-card);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.05)}
     .section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
     .bet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
     .bet-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 6px;color:var(--text);font-family:'Orbitron',monospace;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
     .bet-btn span{display:block;font-size:9px;color:var(--muted);font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-top:2px}
     .bet-btn:hover{background:rgba(255,107,0,.15);border-color:var(--orange)}
     .bet-btn.active{background:rgba(255,107,0,.2);border-color:var(--orange);color:var(--yellow);box-shadow:0 0 16px rgba(255,107,0,.3)}
-    .play-btn{width:100%;padding:18px;font-family:'Orbitron',monospace;font-size:18px;font-weight:900;letter-spacing:4px;border:none;border-radius:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+    .play-btn{width:100%;padding:18px;font-family:'Orbitron',monospace;font-size:18px;font-weight:900;letter-spacing:4px;border:none;border-radius:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;margin-bottom:10px;}
     .play-btn.manual{background:linear-gradient(135deg,#ff6b00,#ff2d55);color:#fff;box-shadow:0 4px 24px rgba(255,107,0,.4)}
     .play-btn.auto-running{background:linear-gradient(135deg,#0affee,#0080aa);color:#000;box-shadow:0 4px 24px rgba(10,255,238,.35)}
     .play-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .5s}
@@ -106,7 +106,6 @@
     .play-btn:hover{transform:translateY(-2px)}
     .play-btn:active{transform:translateY(1px)}
     
-
     .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px; position:relative; z-index:2;}
     .panel{background:var(--bg-card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
     .panel-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -215,6 +214,11 @@
 </div>
 
 <div class="controls">
+  <!-- START BUTTON -->
+  <button class="play-btn manual" id="play-btn" onclick="handlePlay()" data-i18n="play">
+    ⚡ PLAY
+  </button>
+
   <div class="mode-row">
     <button class="mode-btn active" id="btn-manual" onclick="setMode('manual')" data-i18n="manual">
       ▶ MANUAL<span class="sub">1 DROP / TAP</span>
@@ -224,21 +228,17 @@
     </button>
   </div>
 
-  <div class="bet-section">
+  <div class="bet-section" style="margin-bottom:0;">
     <div class="section-label" data-i18n="bet_label">Bet per Drop (sats)</div>
     <div class="bet-grid">
-      <button class="bet-btn active" onclick="setBet(100,this)">100<span>sats</span></button>
-      <button class="bet-btn" onclick="setBet(500,this)">500<span>sats</span></button>
-      <button class="bet-btn" onclick="setBet(1000,this)">1K<span>sats</span></button>
-      <button class="bet-btn" onclick="setBet(5000,this)">5K<span>sats</span></button>
-      <button class="bet-btn" onclick="setBet(10000,this)">10K<span>sats</span></button>
-      <button class="bet-btn" onclick="setBet(50000,this)">50K<span>sats</span></button>
+      <button class="bet-btn active" data-bet="100" onclick="setBet(100)">100<span>sats</span></button>
+      <button class="bet-btn" data-bet="500" onclick="setBet(500)">500<span>sats</span></button>
+      <button class="bet-btn" data-bet="1000" onclick="setBet(1000)">1K<span>sats</span></button>
+      <button class="bet-btn" data-bet="5000" onclick="setBet(5000)">5K<span>sats</span></button>
+      <button class="bet-btn" data-bet="10000" onclick="setBet(10000)">10K<span>sats</span></button>
+      <button class="bet-btn" data-bet="50000" onclick="setBet(50000)">50K<span>sats</span></button>
     </div>
   </div>
-
-  <button class="play-btn manual" id="play-btn" onclick="handlePlay()" data-i18n="play">
-    ⚡ PLAY
-  </button>
 </div>
 
 
@@ -827,17 +827,29 @@ function chooseLandingSlot() {
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall(xOffset = 0) {
-  if (freeDrops <= 0 && balance < currentBet) {
-    if (autoRunning) stopAuto();
-    if (balance < 100 && physicalBalls.length === 0) {
-      showGameOverOverlay();
-    } else if (balance >= 100) {
-      alert(i18n[currentLang].insufficient);
+  // 無料ドロップがない場合の残高・切り下げ判定
+  if (freeDrops <= 0) {
+    if (balance < 100) {
+      if (autoRunning) stopAuto();
+      if (physicalBalls.length === 0) {
+        showGameOverOverlay();
+      }
+      return false; // ボールは出さない
     }
-    return false;
+    
+    // 残高が現在のベット額を下回っている場合、自動でベット額を最大可能額に切り下げる(ダウンシフト)
+    if (balance < currentBet) {
+      const availableBets =[50000, 10000, 5000, 1000, 500, 100];
+      for (let b of availableBets) {
+        if (balance >= b) {
+          updateBetUI(b);
+          break;
+        }
+      }
+    }
   }
   
-  let actualBet = currentBet; // 実際に賭ける額
+  let actualBet = currentBet;
   
   if (freeDrops > 0) {
     freeDrops--;
@@ -866,7 +878,7 @@ function spawnBall(xOffset = 0) {
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
-      _bet: actualBet, // ★ココを修正！実際の賭け額(actualBet)をボールに持たせる
+      _bet: actualBet, // 実際の賭け額(actualBet)をボールに持たせる
       _targetX: targetX,
       _targetSlot: targetSlot
     }
@@ -974,10 +986,18 @@ function updatePlayBtn() {
   }
 }
 
-function setBet(amount, el) {
+function updateBetUI(amount) {
   currentBet = amount;
-  document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('.bet-btn').forEach(b => {
+    b.classList.remove('active');
+    if (parseInt(b.getAttribute('data-bet')) === amount) {
+      b.classList.add('active');
+    }
+  });
+}
+
+function setBet(amount) {
+  updateBetUI(amount);
 }
 
 // ── UI ────────────────────────────────────────────────────────
