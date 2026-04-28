@@ -18,7 +18,6 @@
 
   <!-- ==========================================
        👇 ここに OGP画像 と Favicon を設定 👇
-       （キャッシュバスティングのため ?v=1.1 を付与）
   =========================================== -->
   <meta name="description" content="Drop the ball, hit the multipliers, and stack real Sats! Experience the thrill of Plinko powered by the Bitcoin Lightning Network.">
   <meta property="og:type" content="website">
@@ -26,12 +25,12 @@
   <meta property="og:site_name" content="PLINKO ⚡️ Lightning Sats">
   <meta property="og:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
   <meta property="og:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
-  <meta property="og:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png?v=1.1">
+  <meta property="og:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png">
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
   <meta name="twitter:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
-  <meta name="twitter:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png?v=1.1">
+  <meta name="twitter:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.png">
 
   <link rel="icon" type="image/png" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png" sizes="32x32">
   <link rel="apple-touch-icon" sizes="180x180" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png">
@@ -701,7 +700,7 @@ const H = gameCanvas.height;
 
 const ROWS      = 12;
 const PEG_R     = 5;
-const PEG_PHYS  = 3.5; // ⬇️ 当たり判定を少し小さくし、下に抜けやすくする
+const PEG_PHYS  = 4;
 const BALL_R    = 11;
 const BALL_PHYS = 10;
 const GAP       = 32;
@@ -757,8 +756,7 @@ function initMatter() {
   world  = engine.world;
   runner = Runner.create();
 
-  // ⬇️ 壁も反発係数 0 にして横弾きを防止
-  const W_OPT = { isStatic: true, friction: 0.1, restitution: 0.0 };
+  const W_OPT = { isStatic: true, friction: 0, restitution: 0.1 };
   World.add(world,[
     Bodies.rectangle(W/2, -10, W,  20, W_OPT),
     Bodies.rectangle(W/2, H+10, W, 20, W_OPT),
@@ -767,9 +765,9 @@ function initMatter() {
   ]);
 
   getPegPositions().forEach(({ x, y }) => {
-    // ⬇️ ピンの反発係数を極小値(0.01)にして「ポン」と跳ねるのを防ぐ
+    // ⬇️ 反発係数 (restitution) を 0.05 まで下げて無駄な跳ねを防止
     const p = Bodies.circle(x, y, PEG_PHYS, {
-      isStatic: true, restitution: 0.01, friction: 0.05, label: 'peg'
+      isStatic: true, restitution: 0.05, friction: 0.05, label: 'peg'
     });
     pegs.push(p);
     World.add(world, p);
@@ -811,24 +809,24 @@ function spawnBall() {
   totalDrops++;
   updateUI();
 
-  // ⬇️ 反発(restitution)を0.01に。空気抵抗(frictionAir)と密度(density)を上げて重く落とす
+  // ⬇️ 位置ブレを狭め (1.5)、restitution (0.1) に下げ、空気抵抗 (0.035) を上げる
   const ball = Bodies.circle(
-    W / 2 + (Math.random() - 0.5) * 0.5, // ⬇️ 初期位置ブレをほぼ無くす
+    W / 2 + (Math.random() - 0.5) * 1.5,
     18,
     BALL_PHYS,
     {
-      restitution: 0.01, 
-      friction: 0.01,
-      frictionAir: 0.045,
-      density: 2.0,
+      restitution: 0.1,
+      friction: 0.005,
+      frictionAir: 0.035,
+      density: 1.5,
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
       _bet: actualBet
     }
   );
-  // ⬇️ 初速の横ブレも極小化(0.05)。真下に落ちやすくする(y: 2.0)
-  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.05, y: 2.0 });
+  // ⬇️ 初速の横ブレも極力抑える
+  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.1, y: 1.5 });
   physicalBalls.push(ball);
   World.add(world, ball);
 
