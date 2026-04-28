@@ -196,7 +196,7 @@
 </div>
 
 <div class="stats-row">
-  <div class="stat-card balance"><div class="stat-label" data-i18n="balance">Balance</div><div class="stat-value" id="balance">30,000</div></div>
+  <div class="stat-card balance"><div class="stat-label" data-i18n="balance">Balance</div><div class="stat-value" id="balance">0</div></div>
   <div class="stat-card won"><div class="stat-label" data-i18n="won">Won</div><div class="stat-value" id="won">0</div></div>
   <div class="stat-card drops"><div class="stat-label" data-i18n="drops">Drops</div><div class="stat-value" id="drop-count">0</div></div>
 </div>
@@ -246,7 +246,9 @@
 
 <div class="bottom-section">
   <div class="panel"><div class="panel-title" data-i18n="recent">Recent</div><div id="history-list"></div></div>
-  <div class="panel"><div class="panel-title" data-i18n="top_wins">Top Wins</div><div id="leaderboard"></div></div>
+  <div class="panel"><div class="panel-title" data-i18n="top_wins">Top Wins</div><div id="leaderboard">
+    <div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⏳ Loading...</div>
+  </div></div>
 </div>
 
 <div class="more-games">
@@ -283,7 +285,7 @@
     <p data-i18n="how_to_desc">
       1. Select your bet amount.<br>
       2. Drop the ball & hit high multipliers.<br>
-      3. Start with 30,000 SATS + 10 FREE Drops!<br>
+      3. Start with 10 FREE Drops!<br>
       4. Deposit via Lightning to keep playing.
     </p>
     <button class="modal-btn" onclick="startGame()" data-i18n="start_game">START GAME</button>
@@ -314,7 +316,7 @@
 
     <div class="section-title" style="margin-top: 24px; font-family:'Orbitron', monospace; font-size:11px; color:var(--yellow); text-align:center;" data-i18n="go_top3">🏆 TOP 3 RANKING</div>
     <div id="go-lb-content" style="margin-bottom: 24px; text-align:left;">
-      <div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⚡ Loading...</div>
+      <div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⏳ Loading...</div>
     </div>
     
     <button class="modal-btn" style="background: linear-gradient(135deg, var(--yellow), var(--orange)); color:#000;" onclick="closeGameOverAndDeposit()">
@@ -369,7 +371,7 @@ const i18n = {
     play: "⚡ PLAY", stop: "⏹ STOP", auto_start: "⟳ AUTO START",
     recent: "Recent", top_wins: "Top Wins",
     how_to_title: "HOW TO PLAY",
-    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 30,000 SATS + 10 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
+    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 10 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
     start_game: "START GAME",
     wallet: "WALLET", deposit_desc: "⚡ DEPOSIT SATS TO PLAY",
     modal_title: "⚡ PAY TO DEPOSIT", tap_qr: "Tap QR to open wallet",
@@ -388,7 +390,7 @@ const i18n = {
     play: "⚡ プレイ", stop: "⏹ 停止", auto_start: "⟳ オート開始",
     recent: "最近の履歴", top_wins: "トップ勝利",
     how_to_title: "遊び方",
-    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回30,000 SATS ＋ 10回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
+    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回10回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
     start_game: "ゲーム開始",
     wallet: "ウォレット", deposit_desc: "⚡ 遊ぶためのSATSを入金",
     modal_title: "⚡ 入金するには支払いを", tap_qr: "QRタップでウォレットを開く",
@@ -407,7 +409,7 @@ const i18n = {
     play: "⚡ 플레이", stop: "⏹ 정지", auto_start: "⟳ 자동 시작",
     recent: "최근 기록", top_wins: "최고 승리",
     how_to_title: "게임 방법",
-    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 30,000 SATS + 무료 10회 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
+    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 무료 10회 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
     start_game: "게임 시작",
     wallet: "지갑", deposit_desc: "⚡ 플레이할 SATS 입금",
     modal_title: "⚡ 입금 결제", tap_qr: "QR 탭하여 지갑 열기",
@@ -419,7 +421,7 @@ const i18n = {
   }
 };
 
-let currentLang = 'ja'; // デフォルト日本語
+let currentLang = 'ja'; 
 
 function setLang(lang) {
   currentLang = lang;
@@ -521,7 +523,7 @@ function handleDepositSuccess() {
   closeInvoiceModal();
   balance += pendingDepositAmount;
   updateUI();
-  showToast(1, pendingDepositAmount, true); // Deposit用の特殊トースト
+  showToast(1, pendingDepositAmount, true);
 }
 
 function closeInvoiceModal() {
@@ -539,19 +541,19 @@ function shareOnX() {
     if (isJackpot) {
       text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回30,000 SATS＋無料10プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回無料10プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
     }
   } else if (currentLang === 'ko') {
     if (isJackpot) {
       text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 30,000 SATS + 무료 10회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 무료 10회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
     }
   } else {
     if (isJackpot) {
       text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 30,000 SATS + 10 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 10 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
     }
   }
 
@@ -622,12 +624,16 @@ function submitGameOverWin() {
 
 function fetchTop3() {
   const el = document.getElementById('go-lb-content');
-  el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⚡ Loading...</div>';
+  el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⏳ Loading...</div>';
+  
   fetch(`${GAS_URL}?action=getStats`)
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Network error');
+    return r.json();
+  })
   .then(data => {
     const board = data.leaderboard ||[];
-    if (!board.length) {
+    if (board.length === 0) {
       el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">No winners yet.</div>';
       return;
     }
@@ -640,8 +646,9 @@ function fetchTop3() {
         <span class="lb-sats" style="font-size: 10px; color: ${i===0 ? '#FFD700' : 'var(--gold)'};">${Number(u.sats).toLocaleString()} sats</span>
       </div>`).join('');
   })
-  .catch(() => {
-    el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">Failed to load ranking.</div>';
+  .catch(err => {
+    console.error("Top3 fetch error:", err);
+    el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⚠️ Failed to load ranking.</div>';
   });
 }
 
@@ -649,6 +656,40 @@ function closeGameOverAndDeposit() {
   document.getElementById('gameover-overlay').classList.remove('show');
   openWallet();
 }
+
+// GAS連携: リーダーボード取得
+function fetchLeaderboard() {
+  const el = document.getElementById('leaderboard');
+  el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⏳ Loading...</div>';
+  
+  fetch(`${GAS_URL}?action=getStats`)
+  .then(r => {
+    if (!r.ok) throw new Error('Network error');
+    return r.json();
+  })
+  .then(data => {
+    const board = data.leaderboard ||[];
+    if (board.length === 0) {
+      el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">No data yet. Be the first!</div>';
+      return;
+    }
+    const top5 = board.slice(0, 5);
+    const ranks =['gold','silver','bronze','',''];
+    const rankNum = ['1','2','3','4','5'];
+    el.innerHTML = top5.map((e,i) =>
+      `<div class="lb-item">
+        <span class="lb-rank ${ranks[i]}">${rankNum[i]}</span>
+        <span class="lb-name">${String(e.name).replace(/[&<>"']/g, '')}</span>
+        <span class="lb-sats">${(e.sats/1000).toFixed(1)}K</span>
+      </div>`
+    ).join('');
+  })
+  .catch(err => {
+    console.error("Leaderboard fetch error:", err);
+    el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⚠️ Failed to load</div>';
+  });
+}
+
 
 // ── Matter.js Physics ─────────────────────────────────────────
 const { Engine, World, Bodies, Body, Events, Runner } = Matter;
@@ -672,7 +713,7 @@ const MULT     =[0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2
 const SLOT_COL =['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
 
 // ── STATE ──────────────────────────────────────────────────────
-let balance    = 30000;
+let balance    = 0;
 let sessionWon = 0;
 let totalDrops = 0;
 let freeDrops  = 10;
@@ -756,7 +797,7 @@ function spawnBall() {
     document.getElementById('free-drops').textContent = freeDrops;
     actualBet = currentBet;
   } else {
-    // 残高が足りない場合は ALL IN（端数をなくしてピッタリ0にする）
+    // 残高が足りない場合は ALL IN
     if (balance < currentBet) {
       actualBet = balance;
     }
@@ -785,7 +826,6 @@ function spawnBall() {
   physicalBalls.push(ball);
   World.add(world, ball);
 
-  // フォールバック: どこかに引っかかった場合など
   setTimeout(() => {
     if (!ball._landed) { ball._landed = true; handleLanding(ball); }
   }, 10000);
@@ -800,7 +840,7 @@ function handleLanding(ball) {
   slot = Math.max(0, Math.min(MULT.length - 1, slot));
 
   const mult = MULT[slot];
-  const win  = Math.floor(ball._bet * mult); // 切り捨てて整数にする
+  const win  = Math.floor(ball._bet * mult);
   balance    += win;
   sessionWon += win;
   history.unshift({ mult, win });
@@ -822,7 +862,6 @@ function handleLanding(ball) {
       }, 150 + Math.random() * 200);
     }
     
-    // すべてのボールが落ちたかチェック
     checkGameOver();
   }, 700);
 }
@@ -1039,7 +1078,6 @@ window.onload = () => {
   renderHistory();
   fetchLeaderboard();
   
-  // 初期状態では Canvas の背景だけ描いておく
   ctx.fillStyle = '#13131f';
   ctx.fillRect(0, 0, W, H);
 };
