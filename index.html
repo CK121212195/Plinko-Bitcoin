@@ -382,7 +382,7 @@ const i18n = {
   },
   ja: {
     balance: "残高", won: "獲得", drops: "落下数", free: "無料",
-    bonus_title: "⚡ ウェルカムボーナス", bonus_sub: "無料ドロップ付き",
+    bonus_title: "⚡ ウェカムボーナス", bonus_sub: "無料ドロップ付き",
     manual: "▶ 手動<span class=\"sub\">1タップ1球</span>",
     auto: "⟳ オート<span class=\"sub\">連続プレイ</span>",
     bet_label: "1球あたりの賭け額 (sats)",
@@ -538,23 +538,24 @@ function shareOnX() {
   let text = "";
   let lastWin = history.length > 0 ? history[0].win : 0;
   
+  // ★テキスト末尾に明示的に改行(\n)を追加して、XのCard展開エラーを防ぐ
   if (currentLang === 'ja') {
     if (isJackpot) {
-      text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork\n\n`;
     } else {
-      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回無料3プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回無料3プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork\n\n`;
     }
   } else if (currentLang === 'ko') {
     if (isJackpot) {
-      text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork\n\n`;
     } else {
-      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 무료 3회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 무료 3회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork\n\n`;
     }
   } else {
     if (isJackpot) {
-      text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork`;
+      text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork\n\n`;
     } else {
-      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 3 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 3 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork\n\n`;
     }
   }
 
@@ -565,12 +566,13 @@ function shareOnX() {
 
 function shareGameOverOnX() {
   let text = "";
+  // ★こちらも同様に改行(\n)を追加
   if (currentLang === 'ja') {
-    text = `🎰 PLINKOでSatsを落とし切った！⚡️\nトータルで ${sessionWon.toLocaleString()} SATS 稼いだ💸💖\n\nボールを落とす快感がたまらない！✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
+    text = `🎰 PLINKOでSatsを落とし切った！⚡️\nトータルで ${sessionWon.toLocaleString()} SATS 稼いだ💸💖\n\nボールを落とす快感がたまらない！✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork\n\n`;
   } else if (currentLang === 'ko') {
-    text = `🎰 플링코에서 모든 Sats를 쏟아부었다!⚡️\n총 ${sessionWon.toLocaleString()} SATS 획득💸💖\n\n공 떨어뜨리는 재미가 쏠쏠!✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
+    text = `🎰 플링코에서 모든 Sats를 쏟아부었다!⚡️\n총 ${sessionWon.toLocaleString()} SATS 획득💸💖\n\n공 떨어뜨리는 재미가 쏠쏠!✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork\n\n`;
   } else {
-    text = `🎰 Dropped all my Sats on Plinko! ⚡️\nTotal won: ${sessionWon.toLocaleString()} SATS 💸💖\n\nStacking sats is too addictive! Who's next? 👇✨\n#Bitcoin #LightningNetwork`;
+    text = `🎰 Dropped all my Sats on Plinko! ⚡️\nTotal won: ${sessionWon.toLocaleString()} SATS 💸💖\n\nStacking sats is too addictive! Who's next? 👇✨\n#Bitcoin #LightningNetwork\n\n`;
   }
   const url = window.location.href.split('?')[0];
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
@@ -716,7 +718,6 @@ const SLOT_COL =['#0affee','#4cd964','#ffaa00','#ff7700','#ff9944','#ff5533','#f
 // ── STATE ──────────────────────────────────────────────────────
 let balance    = parseInt(localStorage.getItem('plinko_balance') || '0');
 let storedFree = localStorage.getItem('plinko_freeDrops');
-// 初回無料ドロップ数を 3 に変更
 let freeDrops  = storedFree !== null ? parseInt(storedFree) : 3;
 let sessionWon = 0;
 let totalDrops = 0;
@@ -828,18 +829,15 @@ function chooseLandingSlot() {
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall(xOffset = 0) {
-  // 無料ドロップがない場合の残高・切り下げ判定
   if (freeDrops <= 0) {
     if (balance < 100) {
-      // ★修正：盤面にボールが残っている場合は復活を信じてAUTOを止めない！
       if (physicalBalls.length === 0) {
         if (autoRunning) stopAuto();
         showGameOverOverlay();
       }
-      return false; // ボールは出さない
+      return false;
     }
     
-    // 残高が現在のベット額を下回っている場合、自動でベット額を最大可能額に切り下げる(ダウンシフト)
     if (balance < currentBet) {
       const availableBets =[50000, 10000, 5000, 1000, 500, 100];
       for (let b of availableBets) {
@@ -855,7 +853,7 @@ function spawnBall(xOffset = 0) {
   
   if (freeDrops > 0) {
     freeDrops--;
-    actualBet = 100; // 無料ドロップ中は強制的に「100sats賭け」にする
+    actualBet = 100;
   } else {
     balance -= currentBet;
     actualBet = currentBet;
@@ -880,7 +878,7 @@ function spawnBall(xOffset = 0) {
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
-      _bet: actualBet, // 実際の賭け額(actualBet)をボールに持たせる
+      _bet: actualBet,
       _targetX: targetX,
       _targetSlot: targetSlot
     }
