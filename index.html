@@ -831,8 +831,9 @@ function spawnBall(xOffset = 0) {
   // 無料ドロップがない場合の残高・切り下げ判定
   if (freeDrops <= 0) {
     if (balance < 100) {
-      if (autoRunning) stopAuto();
+      // ★修正：盤面にボールが残っている場合は復活を信じてAUTOを止めない！
       if (physicalBalls.length === 0) {
+        if (autoRunning) stopAuto();
         showGameOverOverlay();
       }
       return false; // ボールは出さない
