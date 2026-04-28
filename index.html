@@ -294,7 +294,7 @@
 <div id="gameover-overlay" class="modal-overlay">
   <div class="win-box">
     <h2>GAME OVER</h2>
-    <div style="font-size:10px; color:var(--muted); margin-top:8px;" data-i18n="go_sub">CREDITS REACHED 0</div>
+    <div style="font-size:10px; color:var(--muted); margin-top:8px;" data-i18n="go_sub">INSUFFICIENT SATS TO PLAY</div>
     
     <div id="go-record-area" style="margin-top: 20px; text-align: center;">
       <p style="font-size: 10px; color: var(--yellow); margin-bottom: 8px;"><span data-i18n="go_total">TOTAL SATS WON</span>: <span id="go-total-win">0</span> SATS</p>
@@ -375,9 +375,10 @@ const i18n = {
     modal_title: "⚡ PAY TO DEPOSIT", tap_qr: "Tap QR to open wallet",
     modal_waiting: "⏳ Waiting for payment...", btn_cancel: "CANCEL", verify: "VERIFY PAYMENT",
     other_games: "OTHER GAMES", share: "SHARE",
-    engrave: "⚡ ENGRAVE MY NAME", go_sub: "CREDITS REACHED 0", go_total: "TOTAL SATS WON",
+    engrave: "⚡ ENGRAVE MY NAME", go_sub: "INSUFFICIENT SATS TO PLAY", go_total: "TOTAL SATS WON",
     go_top3: "🏆 TOP 3 RANKING", go_btn: "⚡ DEPOSIT TO CONTINUE",
-    share_prompt: "Share your total win on X and invite your friends!"
+    share_prompt: "Share your total win on X and invite your friends!",
+    insufficient: "Not enough SATS for this bet. Please lower your bet or deposit."
   },
   ja: {
     balance: "残高", won: "獲得", drops: "落下数", free: "無料",
@@ -394,9 +395,10 @@ const i18n = {
     modal_title: "⚡ 入金するには支払いを", tap_qr: "QRタップでウォレットを開く",
     modal_waiting: "⏳ 支払いを確認中...", btn_cancel: "キャンセル", verify: "支払いを確認",
     other_games: "他のゲーム", share: "シェア",
-    engrave: "⚡ 名前を刻む", go_sub: "残高が0になりました", go_total: "トータル獲得額",
+    engrave: "⚡ 名前を刻む", go_sub: "残高が最低賭け額未満になりました", go_total: "トータル獲得額",
     go_top3: "🏆 トップ3 ランキング", go_btn: "⚡ 入金して続ける",
-    share_prompt: "Xで結果をシェアして友達にも遊んでもらおう！"
+    share_prompt: "Xで結果をシェアして友達にも遊んでもらおう！",
+    insufficient: "残高が足りません。賭け額を下げるか、Satsを入金してください。"
   },
   ko: {
     balance: "잔액", won: "획득", drops: "드롭", free: "무료",
@@ -413,9 +415,10 @@ const i18n = {
     modal_title: "⚡ 입금 결제", tap_qr: "QR 탭하여 지갑 열기",
     modal_waiting: "⏳ 결제 대기 중...", btn_cancel: "취소", verify: "결제 확인",
     other_games: "다른 게임", share: "공유",
-    engrave: "⚡ 내 이름 새기기", go_sub: "잔액이 0이 되었습니다", go_total: "총 획득액",
+    engrave: "⚡ 내 이름 새기기", go_sub: "잔액이 최소 배팅액 미만입니다", go_total: "총 획득액",
     go_top3: "🏆 톱 3 랭킹", go_btn: "⚡ 입금하고 계속하기",
-    share_prompt: "X에 결과를 공유하고 친구들을 초대해보세요!"
+    share_prompt: "X에 결과를 공유하고 친구들을 초대해보세요!",
+    insufficient: "SATS가 부족합니다. 배팅액을 낮추거나 입금해주세요."
   }
 };
 
@@ -563,7 +566,7 @@ function shareOnX() {
 function shareGameOverOnX() {
   let text = "";
   if (currentLang === 'ja') {
-    text = `🎰 PLINKOで全Satsを落とし切った！⚡️\nトータルで ${sessionWon.toLocaleString()} SATS 稼いだ💸💖\n\nボールを落とす快感がたまらない！✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
+    text = `🎰 PLINKOでSatsを落とし切った！⚡️\nトータルで ${sessionWon.toLocaleString()} SATS 稼いだ💸💖\n\nボールを落とす快感がたまらない！✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
   } else if (currentLang === 'ko') {
     text = `🎰 플링코에서 모든 Sats를 쏟아부었다!⚡️\n총 ${sessionWon.toLocaleString()} SATS 획득💸💖\n\n공 떨어뜨리는 재미가 쏠쏠!✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
   } else {
@@ -576,7 +579,8 @@ function shareGameOverOnX() {
 
 // ── Game Over & Leaderboard Logic ─────────────────────────────
 function checkGameOver() {
-  if (balance <= 0 && physicalBalls.length === 0 && freeDrops <= 0) {
+  // 最低ベット額(100sats)未満で、盤面にボールがなく、無料ドロップもなければゲームオーバー
+  if (balance < 100 && physicalBalls.length === 0 && freeDrops <= 0) {
     if (autoRunning) stopAuto();
     showGameOverOverlay();
   }
@@ -713,10 +717,11 @@ const MULT     =[15,  6.0, 3.0, 1.5, 1.0, 0.7, 0.6, 0.7, 1.0, 1.5, 3.0, 6.0, 15]
 const SLOT_COL =['#0affee','#4cd964','#ffaa00','#ff7700','#ff9944','#ff5533','#ff2d55','#ff5533','#ff9944','#ff7700','#ffaa00','#4cd964','#0affee'];
 
 // ── STATE ──────────────────────────────────────────────────────
-let balance    = 0;
+let balance    = parseInt(localStorage.getItem('plinko_balance') || '0');
+let storedFree = localStorage.getItem('plinko_freeDrops');
+let freeDrops  = storedFree !== null ? parseInt(storedFree) : 10;
 let sessionWon = 0;
 let totalDrops = 0;
-let freeDrops  = 10;
 let currentBet = 100;
 let mode       = 'manual';
 let autoRunning= false;
@@ -727,11 +732,16 @@ let engine, runner, world;
 let pegs  =[];
 let physicalBalls =[];
 
-// ⬇️ 物理設定（スピード感重視・二項分布維持）
-let physGravity = 3.5;        // 重力強め：スパッと落ちるスピード感
-let physBallRest = 0.10;      // 反発を抑えて横飛び防止
-let physPegRest = 0.10;       // ピン反発も低め
-let physFrictionAir = 0.18;   // 空気抵抗強め：ピン間で横速度を素早く消す
+let physGravity = 3.5;
+let physBallRest = 0.10;
+let physPegRest = 0.10;
+let physFrictionAir = 0.18;
+
+// ── 状態保存関数 (F5回避用) ───────────────────────────────────
+function saveGameState() {
+  localStorage.setItem('plinko_balance', balance.toString());
+  localStorage.setItem('plinko_freeDrops', freeDrops.toString());
+}
 
 // ── GEOMETRY ──────────────────────────────────────────────────
 function getPegPositions() {
@@ -757,7 +767,6 @@ function getSlotGeometry() {
 
 // ── INIT MATTER ───────────────────────────────────────────────
 function initMatter() {
-  // 初期設定として強めの重力（physGravity = 3.0）を適用
   engine = Engine.create({ gravity: { y: physGravity } });
   world  = engine.world;
   runner = Runner.create();
@@ -771,7 +780,6 @@ function initMatter() {
   ]);
 
   getPegPositions().forEach(({ x, y }) => {
-    // ⬇️ パラメータ変数を使用
     const p = Bodies.circle(x, y, PEG_PHYS, {
       isStatic: true, restitution: physPegRest, friction: 0.05, label: 'peg'
     });
@@ -790,7 +798,6 @@ function initMatter() {
     });
   });
 
-  // ── x方向速度の上限キャップ（端への横流れを物理レベルで封じる）
   Events.on(engine, 'beforeUpdate', () => {
     physicalBalls.forEach(ball => {
       if (!ball || ball._landed) return;
@@ -801,7 +808,6 @@ function initMatter() {
           y: ball.velocity.y
         });
       }
-      // ボールが下半分に入ったら予め決めたスロットへ穏やかに誘導
       if (ball._targetX !== undefined && ball.position.y > H * 0.52) {
         const dx = ball._targetX - ball.position.x;
         const progress = Math.min(1.0, (ball.position.y - H * 0.52) / (H * 0.35));
@@ -814,41 +820,40 @@ function initMatter() {
   });
 }
 
-// ── 二項分布RNG：ハウスエッジ設計に沿ったスロット事前決定 ────────
 function chooseLandingSlot() {
-  // 12行のプリンコ = 二項分布 B(12, 0.5)
-  // 各行でランダムに左右どちらかへ → 0〜12 のスロット番号を返す
   let pos = 0;
   for (let i = 0; i < ROWS; i++) {
     if (Math.random() < 0.5) pos++;
   }
-  return pos; // 0=左端(15x)  6=中央(0.6x)  12=右端(15x)
+  return pos;
 }
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall(xOffset = 0) {
-  if (freeDrops <= 0 && balance <= 0) {
-    checkGameOver();
+  // 無料ドロップがなく、残高が現在の選択しているベット額(currentBet)に満たない場合
+  if (freeDrops <= 0 && balance < currentBet) {
+    if (autoRunning) stopAuto();
+    
+    // さらに、最低ベット額である「100sats」すら持っていない場合は、完全にゲームオーバー
+    if (balance < 100 && physicalBalls.length === 0) {
+      showGameOverOverlay();
+    } else if (balance >= 100) {
+      // 100sats以上はあるが、選択中のベット額には足りない場合
+      alert(i18n[currentLang].insufficient);
+    }
     return false;
   }
   
-  let actualBet = currentBet;
-  
+  // 残高からベット額を引く（端数オールインは廃止しました）
   if (freeDrops > 0) {
     freeDrops--;
-    document.getElementById('free-drops').textContent = freeDrops;
-    actualBet = currentBet;
   } else {
-    if (balance < currentBet) {
-      actualBet = balance;
-    }
-    balance -= actualBet;
+    balance -= currentBet;
   }
   
   totalDrops++;
   updateUI();
 
-  // 落下先スロットを二項分布RNGで事前決定（ハウスエッジ保証）
   const targetSlot = chooseLandingSlot();
   const { x0: sx0, sw: ssw } = getSlotGeometry();
   const targetX = sx0 + (targetSlot + 0.5) * ssw;
@@ -865,7 +870,7 @@ function spawnBall(xOffset = 0) {
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
-      _bet: actualBet,
+      _bet: currentBet, // 現在のベット額を保持
       _targetX: targetX,
       _targetSlot: targetSlot
     }
@@ -875,6 +880,7 @@ function spawnBall(xOffset = 0) {
   physicalBalls.push(ball);
   World.add(world, ball);
 
+  // 【元の設定に復元】フェイルセーフの時間を10000ms（10秒）に戻しました
   setTimeout(() => {
     if (!ball._landed) { ball._landed = true; handleLanding(ball); }
   }, 10000);
@@ -885,7 +891,6 @@ function spawnBall(xOffset = 0) {
 // ── LANDING ───────────────────────────────────────────────────
 function handleLanding(ball) {
   const { x0, sw } = getSlotGeometry();
-  // 事前決定のスロットを優先、なければ物理位置で計算
   let slot;
   if (ball._targetSlot !== undefined) {
     slot = ball._targetSlot;
@@ -906,27 +911,28 @@ function handleLanding(ball) {
   showToast(mult, win);
   if (win >= ball._bet * 5) triggerConfetti();
 
+  // 【元の設定に復元】着地後の余韻の待ち時間を700ms（0.7秒）に戻しました
   setTimeout(() => {
     World.remove(world, ball);
     const i = physicalBalls.indexOf(ball);
     if (i > -1) physicalBalls.splice(i, 1);
 
-    // 全ボールが着地してからautoを再起動（2球同時ドロップ対応）
     if (autoRunning && physicalBalls.length === 0) {
       autoTimer = setTimeout(() => {
         if (autoRunning) dropBalls();
       }, 180);
     }
     
+    // ここでも着地後に残高チェックを行う
     checkGameOver();
   }, 700);
 }
 
 // ── 2球同時ドロップ ────────────────────────────────────────────
 function dropBalls() {
-  const ok1 = spawnBall(-10);  // 左寄りに1球
+  const ok1 = spawnBall(-10);
   if (ok1) {
-    setTimeout(() => spawnBall(+10), 60);  // 60ms後に右寄りに1球
+    setTimeout(() => spawnBall(+10), 60);
   }
 }
 
@@ -983,9 +989,11 @@ function setBet(amount, el) {
 
 // ── UI ────────────────────────────────────────────────────────
 function updateUI() {
+  saveGameState();
   document.getElementById('balance').textContent    = Math.floor(balance).toLocaleString();
   document.getElementById('won').textContent        = Math.floor(sessionWon).toLocaleString();
   document.getElementById('drop-count').textContent = totalDrops.toLocaleString();
+  document.getElementById('free-drops').textContent = freeDrops;
 }
 
 function showToast(mult, win, isDeposit = false) {
@@ -1130,6 +1138,10 @@ window.onload = () => {
   
   ctx.fillStyle = '#13131f';
   ctx.fillRect(0, 0, W, H);
+
+  if (balance < 100 && freeDrops <= 0) {
+    checkGameOver();
+  }
 };
 </script>
 </body>
