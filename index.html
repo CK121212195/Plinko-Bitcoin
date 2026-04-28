@@ -3,31 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PLINKO — Lightning Sats</title>
+  <title>PLINKO ⚡️ Lightning Sats</title>
 
+  <!-- ==========================================
+       👇 ここに Google Analytics (gtag) を設定 👇
+  =========================================== -->
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VKFRN800K7"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MYW872C1Y2"></script>
   <script>
     window.dataLayer = window.dataLayer ||[];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-VKFRN800K7');
+    gtag('config', 'G-MYW872C1Y2');
   </script>
 
-  <!-- OGP & Favicon -->
+  <!-- ==========================================
+       👇 ここに OGP画像 と Favicon を設定 👇
+  =========================================== -->
+  <meta name="description" content="Drop the ball, hit the multipliers, and stack real Sats! Experience the thrill of Plinko powered by the Bitcoin Lightning Network.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ck121212195.github.io/plinko/">
-  <meta property="og:site_name" content="PLINKO — Lightning Sats">
-  <meta property="og:title" content="PLINKO — カワイイ！楽しい！Satsを稼ごう💖">
-  <meta property="og:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで楽しく遊ぼう✨ #LightningNetwork">
-  <meta property="og:image" content="https://ck121212195.github.io/LNbits_slot2/og-image.png">
+  <meta property="og:url" content="https://ck121212195.github.io/Plinko-Bitcoin/">
+  <meta property="og:site_name" content="PLINKO ⚡️ Lightning Sats">
+  <meta property="og:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
+  <meta property="og:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
+  <meta property="og:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.jpg">
+  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PLINKO — カワイイ！楽しい！Satsを稼ごう💖">
-  <meta name="twitter:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで楽しく遊ぼう✨ #LightningNetwork">
-  <meta name="twitter:image" content="https://ck121212195.github.io/LNbits_slot2/og-image.png">
+  <meta name="twitter:title" content="PLINKO ⚡️ Lightning Sats | Play & Earn Bitcoin">
+  <meta name="twitter:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで本物のSatsで楽しく遊ぼう💸✨">
+  <meta name="twitter:image" content="https://ck121212195.github.io/Plinko-Bitcoin/og-image.jpg">
 
-  <link rel="icon" type="image/png" href="https://ck121212195.github.io/LNbits_slot2/favicon.png" sizes="32x32">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://ck121212195.github.io/LNbits_slot2/favicon.png">
+  <link rel="icon" type="image/png" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://ck121212195.github.io/Plinko-Bitcoin/favicon.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -193,7 +200,7 @@
     <div class="bonus-left" data-i18n="bonus_title">⚡ Welcome Bonus</div>
     <div class="bonus-sub" data-i18n="bonus_sub">Free drops included</div>
   </div>
-  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub" data-i18n="free">FREE</div></div>
+  <div style="text-align:right"><div class="bonus-count" id="free-drops">10</div><div class="bonus-sub" data-i18n="free">FREE</div></div>
 </div>
 
 <div class="game-wrapper">
@@ -256,10 +263,10 @@
 
 <div class="credits">
   <div style="font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;">
-    <span>⚡</span> Bitcoin Lightning Network
+    <span>⚡</span> Powered by Bitcoin Lightning Network
   </div>
   <div style="font-size:10px; color:var(--muted); display:flex; align-items:center; gap:6px; margin-top:4px;">
-    <span>🔥</span> THE FIAT BURNER <span style="opacity:0.5;">·</span> Not financial advice. Have fun. Stack sats. 💎
+    Not financial advice. Have fun. Stack sats. 💎
   </div>
 </div>
 
@@ -270,7 +277,7 @@
     <p data-i18n="how_to_desc">
       1. Select your bet amount.<br>
       2. Drop the ball & hit high multipliers.<br>
-      3. Start with 30,000 SATS + 20 FREE Drops!<br>
+      3. Start with 30,000 SATS + 10 FREE Drops!<br>
       4. Deposit via Lightning to keep playing.
     </p>
     <button class="modal-btn" onclick="startGame()" data-i18n="start_game">START GAME</button>
@@ -323,7 +330,7 @@ const i18n = {
     play: "⚡ PLAY", stop: "⏹ STOP", auto_start: "⟳ AUTO START",
     recent: "Recent", top_wins: "Top Wins",
     how_to_title: "HOW TO PLAY",
-    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 30,000 SATS + 20 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
+    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 30,000 SATS + 10 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
     start_game: "START GAME",
     wallet: "WALLET", deposit_desc: "⚡ DEPOSIT SATS TO PLAY",
     modal_title: "⚡ PAY TO DEPOSIT", tap_qr: "Tap QR to open wallet",
@@ -339,7 +346,7 @@ const i18n = {
     play: "⚡ プレイ", stop: "⏹ 停止", auto_start: "⟳ オート開始",
     recent: "最近の履歴", top_wins: "トップ勝利",
     how_to_title: "遊び方",
-    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回30,000 SATS ＋ 20回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
+    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回30,000 SATS ＋ 10回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
     start_game: "ゲーム開始",
     wallet: "ウォレット", deposit_desc: "⚡ 遊ぶためのSATSを入金",
     modal_title: "⚡ 入金するには支払いを", tap_qr: "QRタップでウォレットを開く",
@@ -355,7 +362,7 @@ const i18n = {
     play: "⚡ 플레이", stop: "⏹ 정지", auto_start: "⟳ 자동 시작",
     recent: "최근 기록", top_wins: "최고 승리",
     how_to_title: "게임 방법",
-    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 30,000 SATS + 20회 무료 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
+    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 30,000 SATS + 무료 10회 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
     start_game: "게임 시작",
     wallet: "지갑", deposit_desc: "⚡ 플레이할 SATS 입금",
     modal_title: "⚡ 입금 결제", tap_qr: "QR 탭하여 지갑 열기",
@@ -484,19 +491,19 @@ function shareOnX() {
     if (isJackpot) {
       text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回30,000 SATS＋無料20プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回30,000 SATS＋無料10プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
     }
   } else if (currentLang === 'ko') {
     if (isJackpot) {
       text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 30,000 SATS + 무료 20회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 30,000 SATS + 무료 10회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
     }
   } else {
     if (isJackpot) {
       text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 30,000 SATS + 20 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 30,000 SATS + 10 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
     }
   }
 
@@ -530,7 +537,7 @@ const SLOT_COL =['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0
 let balance    = 30000;
 let sessionWon = 0;
 let totalDrops = 0;
-let freeDrops  = 20; 
+let freeDrops  = 10; // ★10個に変更
 let currentBet = 100;
 let mode       = 'manual';
 let autoRunning= false;
@@ -538,7 +545,7 @@ let autoTimer  = null;
 let history    =[];
 
 let engine, runner, world;
-let pegs  = [];
+let pegs  =[];
 let physicalBalls =[];
 
 // ── GEOMETRY ──────────────────────────────────────────────────
@@ -905,7 +912,7 @@ function triggerConfetti() {
 // ── BOOT ──────────────────────────────────────────────────────
 window.onload = () => {
   const userLang = (navigator.language || navigator.userLanguage).substring(0, 2);
-  const defaultLang = ['ja', 'ko'].includes(userLang) ? userLang : 'en';
+  const defaultLang =['ja', 'ko'].includes(userLang) ? userLang : 'en';
   setLang(defaultLang);
   
   initMatter();
