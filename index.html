@@ -1,575 +1,542 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>⚡ SATS PLINKO ⚡</title>
-
-  <meta property="og:title" content="⚡ SATS PLINKO — Lightning Sats Jackpot!">
-  <meta property="og:description" content="Drop Sats and aim for 1000x multipliers! Free welcome drops included.">
-  
+  <title>PLINKO — Lightning Sats</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a001f;
-      --accent: #ff00aa;
-      --gold: #ffd700;
-      --cyan: #00ffff;
+      --bg-deep:#0c0c14; --bg-mid:#13131f; --bg-card:#1a1a2e;
+      --orange:#ff6b00; --yellow:#ffc700; --red:#ff2d55; --cyan:#0affee; --green:#4cd964;
+      --text:#f0f0f8; --muted:#6e6e8a;
     }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(180deg, #0a001f 0%, #2a0a5c 100%);
-      color: #fff;
-      font-family: 'Press Start 2P', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      background: linear-gradient(#ff00aa, #aa00ff);
-      padding: 15px 0;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(255,0,170,0.6);
-    }
-
-    .title {
-      font-size: clamp(28px, 9vw, 48px);
-      color: #fff;
-      text-shadow: 0 0 20px #ffd700, 0 0 40px #ff00aa;
-      letter-spacing: 6px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #ffd700;
-      margin-top: 6px;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 12px;
-      flex: 1;
-    }
-
-    .balance-bar {
-      display: flex;
-      background: rgba(0,0,0,0.7);
-      border: 4px solid #ffd700;
-      border-radius: 16px;
-      padding: 14px 20px;
-      margin-bottom: 16px;
-      justify-content: space-between;
-      box-shadow: 0 0 30px #ffd700;
-    }
-
-    .bal {
-      text-align: center;
-    }
-
-    .bal-label {
-      font-size: 10px;
-      color: #aaa;
-    }
-
-    .bal-value {
-      font-size: 24px;
-      color: #00ffff;
-    }
-
-    .welcome {
-      background: linear-gradient(90deg, #ffd700, #ffaa00);
-      color: #000;
-      text-align: center;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 15px;
-      margin-bottom: 16px;
-      box-shadow: 0 0 25px #ffd700;
-    }
-
-    .game-wrapper {
-      background: #000;
-      border: 6px solid #ff00aa;
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 16px;
-      box-shadow: 0 15px 50px rgba(255,0,170,0.5);
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .controls {
-      background: rgba(20,10,50,0.95);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .bet-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .bet-btn {
-      flex: 1;
-      padding: 14px 10px;
-      background: #1a0f38;
-      border: 3px solid #555;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .bet-btn.active {
-      border-color: #ffd700;
-      background: #3a2a7a;
-      box-shadow: 0 0 20px #ffd700;
-    }
-
-    .drop-button {
-      width: 100%;
-      padding: 20px;
-      font-size: 22px;
-      background: linear-gradient(#ffd700, #ffaa00);
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 8px 0 #b87800;
-      cursor: pointer;
-      margin-bottom: 12px;
-    }
-
-    .drop-button:active {
-      transform: translateY(6px);
-      box-shadow: 0 2px 0 #b87800;
-    }
-
-    .settings {
-      display: flex;
-      gap: 12px;
-    }
-
-    select {
-      flex: 1;
-      padding: 12px;
-      background: #1a0f38;
-      color: #ffd700;
-      border: 3px solid #4a32a0;
-      border-radius: 10px;
-      font-size: 13px;
-    }
-
-    .result {
-      text-align: center;
-      font-size: 18px;
-      padding: 16px;
-      min-height: 60px;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.6);
-      margin-bottom: 16px;
-    }
-
-    .win { color: #2eff8a; text-shadow: 0 0 25px #2eff8a; }
-    .jackpot { color: #ffd700; animation: flash 0.4s infinite alternate; }
-
-    @keyframes flash {
-      from { text-shadow: 0 0 15px #ffd700; }
-      to { text-shadow: 0 0 50px #ffd700, 0 0 80px #ff00aa; }
-    }
-
-    .lb {
-      background: rgba(20,10,50,0.95);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-
-    .lb-title {
-      text-align: center;
-      color: #ffd700;
-      margin-bottom: 12px;
-    }
-
-    .lb-row {
-      display: flex;
-      padding: 10px;
-      background: rgba(255,215,0,0.1);
-      margin-bottom: 8px;
-      border-radius: 8px;
-    }
-
-    .howto {
-      background: rgba(20,10,50,0.8);
-      padding: 16px;
-      border-radius: 16px;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #ddd;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #888;
-      font-size: 13px;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+    .header{width:100%;max-width:480px;padding:16px 20px 10px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:22px;letter-spacing:4px}
+    .logo span{color:var(--orange)}
+    .logo-sub{font-size:9px;font-weight:700;letter-spacing:3px;color:var(--yellow);display:block;margin-top:-1px}
+    .ln-badge{background:linear-gradient(135deg,#f7931a,#ffb84d);color:#000;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;letter-spacing:1px;display:flex;align-items:center;gap:5px}
+    .ln-dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+    .stats-row{width:100%;max-width:480px;padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .stat-card{background:var(--bg-card);border-radius:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .stat-card.balance::before{background:var(--cyan)}
+    .stat-card.won::before{background:var(--yellow)}
+    .stat-card.drops::before{background:var(--orange)}
+    .stat-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+    .stat-value{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .stat-card.balance .stat-value{color:var(--cyan)}
+    .stat-card.won .stat-value{color:var(--yellow)}
+    .stat-card.drops .stat-value{color:var(--orange)}
+    .bonus-banner{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:linear-gradient(135deg,#f7931a18,#ffb84d0a);border:1px solid #f7931a44;border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+    .bonus-left{font-size:12px;font-weight:700;letter-spacing:1px;color:#f7931a;text-transform:uppercase}
+    .bonus-sub{font-size:11px;color:var(--muted)}
+    .bonus-count{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--yellow);line-height:1}
+    .game-wrapper{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:var(--bg-mid);border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;position:relative}
+    canvas{display:block;width:100%;height:auto}
+    .toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(12,12,20,.95);border-radius:14px;padding:16px 28px;text-align:center;border:2px solid var(--orange);pointer-events:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1);z-index:10}
+    .toast.show{transform:translate(-50%,-50%) scale(1)}
+    .toast-mult{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--yellow)}
+    .toast-sats{font-size:16px;font-weight:700;color:var(--cyan);margin-top:4px}
+    .controls{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px}
+    .mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+    .mode-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 10px;color:var(--text);font-family:'Orbitron',monospace;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+    .mode-btn .sub{display:block;font-family:'Rajdhani',sans-serif;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-top:2px}
+    .mode-btn.active{background:rgba(255,107,0,.2);border-color:var(--orange);color:var(--yellow);box-shadow:0 0 16px rgba(255,107,0,.3)}
+    .mode-btn.auto-on{background:rgba(10,255,238,.15);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(10,255,238,.25)}
+    .bet-section{background:var(--bg-card);border-radius:12px;padding:14px 16px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05)}
+    .section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+    .bet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .bet-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 6px;color:var(--text);font-family:'Orbitron',monospace;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+    .bet-btn span{display:block;font-size:9px;color:var(--muted);font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-top:2px}
+    .bet-btn:hover{background:rgba(255,107,0,.15);border-color:var(--orange)}
+    .bet-btn.active{background:rgba(255,107,0,.2);border-color:var(--orange);color:var(--yellow);box-shadow:0 0 16px rgba(255,107,0,.3)}
+    .play-btn{width:100%;padding:18px;font-family:'Orbitron',monospace;font-size:18px;font-weight:900;letter-spacing:4px;border:none;border-radius:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+    .play-btn.manual{background:linear-gradient(135deg,#ff6b00,#ff2d55);color:#fff;box-shadow:0 4px 24px rgba(255,107,0,.4)}
+    .play-btn.auto-running{background:linear-gradient(135deg,#0affee,#0080aa);color:#000;box-shadow:0 4px 24px rgba(10,255,238,.35)}
+    .play-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .5s}
+    .play-btn:hover::before{left:100%}
+    .play-btn:hover{transform:translateY(-2px)}
+    .play-btn:active{transform:translateY(1px)}
+    .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .panel{background:var(--bg-card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
+    .panel-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+    .panel-title::before{content:'';display:inline-block;width:3px;height:12px;border-radius:2px}
+    .panel:first-child .panel-title::before{background:var(--cyan)}
+    .panel:last-child .panel-title::before{background:var(--yellow)}
+    .history-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+    .history-item:last-child{border-bottom:none}
+    .hist-mult{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px}
+    .hist-mult.big{background:rgba(255,199,0,.2);color:var(--yellow)}
+    .hist-mult.mid{background:rgba(74,205,100,.2);color:var(--green)}
+    .hist-mult.low{background:rgba(255,45,85,.2);color:#ff5f7a}
+    .hist-sats{font-weight:600;font-size:12px;color:var(--muted)}
+    .lb-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+    .lb-item:last-child{border-bottom:none}
+    .lb-rank{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;width:20px;color:var(--muted)}
+    .lb-rank.gold{color:var(--yellow)}
+    .lb-rank.silver{color:#c0c0c0}
+    .lb-rank.bronze{color:#cd7f32}
+    .lb-name{flex:1;font-weight:600;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lb-sats{font-family:'Orbitron',monospace;font-size:10px;color:var(--yellow);font-weight:700}
+    .footer{width:100%;max-width:480px;padding:10px 20px 24px;display:flex;justify-content:center;gap:24px}
+    .footer a{color:var(--cyan);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:1px;opacity:.7;transition:opacity .2s}
+    .footer a:hover{opacity:1}
+    @keyframes jackpot{0%,100%{color:var(--yellow)}33%{color:#ff2d55}66%{color:var(--cyan)}}
+    .jackpot-text{animation:jackpot .35s infinite}
+    #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;display:none}
   </style>
 </head>
 <body>
+<canvas id="particle-canvas"></canvas>
 
 <div class="header">
-  <div class="title">SATS PLINKO</div>
-  <div class="subtitle">LIGHTNING NETWORK JACKPOT</div>
+  <div class="logo">PLINK<span>O</span><span class="logo-sub">LIGHTNING SATS</span></div>
+  <div class="ln-badge"><div class="ln-dot"></div>BTC LN</div>
 </div>
 
-<div class="container">
+<div class="stats-row">
+  <div class="stat-card balance"><div class="stat-label">Balance</div><div class="stat-value" id="balance">30,000</div></div>
+  <div class="stat-card won"><div class="stat-label">Won</div><div class="stat-value" id="won">0</div></div>
+  <div class="stat-card drops"><div class="stat-label">Drops</div><div class="stat-value" id="drop-count">0</div></div>
+</div>
 
-  <div class="balance-bar">
-    <div class="bal">
-      <div class="bal-label">BALANCE</div>
-      <div class="bal-value" id="balance">30000</div>
-    </div>
-    <div class="bal">
-      <div class="bal-label">WON</div>
-      <div class="bal-value" id="won" style="color:#ffd700">0</div>
-    </div>
+<div class="bonus-banner">
+  <div><div class="bonus-left">⚡ Welcome Bonus</div><div class="bonus-sub">Free drops included</div></div>
+  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub">FREE</div></div>
+</div>
+
+<div class="game-wrapper">
+  <canvas id="canvas" width="448" height="560"></canvas>
+  <div class="toast" id="toast">
+    <div class="toast-mult" id="toast-mult">0x</div>
+    <div class="toast-sats" id="toast-sats">+0 SATS</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="mode-row">
+    <button class="mode-btn active" id="btn-manual" onclick="setMode('manual')">
+      ▶ MANUAL<span class="sub">1 DROP / TAP</span>
+    </button>
+    <button class="mode-btn" id="btn-auto" onclick="setMode('auto')">
+      ⟳ AUTO<span class="sub">CONTINUOUS</span>
+    </button>
   </div>
 
-  <div class="welcome">
-    WELCOME BONUS<br>
-    <span style="font-size:28px;color:#000">20 FREE DROPS</span>
-  </div>
-
-  <div class="game-wrapper">
-    <canvas id="canvas" width="460" height="560"></canvas>
-  </div>
-
-  <div class="controls">
-    <div class="bet-group">
-      <button class="bet-btn active" onclick="setBet(500)">500</button>
-      <button class="bet-btn" onclick="setBet(1000)">1,000</button>
-      <button class="bet-btn" onclick="setBet(5000)">5,000</button>
-    </div>
-
-    <button class="drop-button" onclick="dropBall()">DROP BALL ⚡</button>
-
-    <div class="settings">
-      <select id="rows" onchange="resetGame()">
-        <option value="12">12 ROWS</option>
-        <option value="14">14 ROWS</option>
-        <option value="16" selected>16 ROWS (1000x)</option>
-      </select>
-      <select id="risk" onchange="resetGame()">
-        <option value="low">LOW RISK</option>
-        <option value="medium" selected>MEDIUM</option>
-        <option value="high">HIGH RISK</option>
-      </select>
+  <div class="bet-section">
+    <div class="section-label">Bet per Drop (sats)</div>
+    <div class="bet-grid">
+      <button class="bet-btn" onclick="setBet(100,this)">100<span>sats</span></button>
+      <button class="bet-btn active" onclick="setBet(500,this)">500<span>sats</span></button>
+      <button class="bet-btn" onclick="setBet(1000,this)">1K<span>sats</span></button>
+      <button class="bet-btn" onclick="setBet(5000,this)">5K<span>sats</span></button>
+      <button class="bet-btn" onclick="setBet(10000,this)">10K<span>sats</span></button>
+      <button class="bet-btn" onclick="setBet(50000,this)">50K<span>sats</span></button>
     </div>
   </div>
 
-  <div class="result" id="result">PRESS DROP TO START</div>
+  <button class="play-btn manual" id="play-btn" onclick="handlePlay()">
+    ⚡ PLAY
+  </button>
+</div>
 
-  <div class="lb">
-    <div class="lb-title">🏆 ALL-TIME TOP 5</div>
-    <div id="leaderboard"></div>
-  </div>
-
-  <div class="howto">
-    • Drop your Sats<br>
-    • Watch the ball bounce through the pegs<br>
-    • Land in high multiplier slots for massive wins!<br>
-    • Powered by Lightning Network
-  </div>
-
+<div class="bottom-section">
+  <div class="panel"><div class="panel-title">Recent</div><div id="history-list"></div></div>
+  <div class="panel"><div class="panel-title">Top Wins</div><div id="leaderboard"></div></div>
 </div>
 
 <div class="footer">
-  ← <a href="https://ck121212195.github.io/LNbits_slot2/" style="color:#00ffff">Lightning Slot</a> | 
-  <a href="https://ck121212195.github.io/Bitcoin-Run/" style="color:#00ffff">Bitcoin Run →</a>
+  <a href="https://ck121212195.github.io/LNbits_slot2/">← Slot</a>
+  <a href="https://ck121212195.github.io/Bitcoin-Run/">Run →</a>
 </div>
 
 <script>
-// Matter.js setup
-const { Engine, Render, World, Bodies, Body, Events, Runner, Composite } = Matter;
+const { Engine, World, Bodies, Body, Events, Runner } = Matter;
 
-let engine;
-let runner;
-let world;
-let canvas, ctx;
-let pegs = [];
-let dividers = [];
-let balls = [];
-let currentBet = 1000;
-let balance = 30000;
+const gameCanvas = document.getElementById('canvas');
+const ctx = gameCanvas.getContext('2d');
+const W = gameCanvas.width;
+const H = gameCanvas.height;
+
+// ── LAYOUT CONSTANTS ──────────────────────────────────────────
+const ROWS      = 12;
+const PEG_R     = 5;        // visual peg radius
+const PEG_PHYS  = 4;        // physics peg radius (slightly smaller = easier bounce)
+const BALL_R    = 11;       // visual ball radius
+const BALL_PHYS = 10;       // physics ball radius
+const GAP       = 32;       // horizontal peg spacing
+const BOARD_TOP = 55;
+const SLOT_H    = 48;
+const SLOT_Y    = H - SLOT_H - 6;
+
+// ── HOUSE EDGE TABLE ─────────────────────────────────────────
+// 13 slots (ROWS+1), EV ≈ 0.60x → house edge ~40%
+// Symmetric. Edges near 0 to bleed balance.
+const MULT     = [0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2];
+const SLOT_COL = ['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
+
+// ── STATE ──────────────────────────────────────────────────────
+let balance    = 30000;
 let sessionWon = 0;
-let rows = 16;
-let risk = "medium";
+let totalDrops = 0;
+let freeDrops  = 20;
+let currentBet = 500;
+let mode       = 'manual';
+let autoRunning= false;
+let autoTimer  = null;
+let history    = [];
 
-const multipliers = [0.5, 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000, 500, 250, 100, 50, 25, 10];
+let engine, runner, world;
+let pegs  = [];
+let balls = [];
 
-let leaderboard = [
-  {name: "SATS KING", sats: 24500},
-  {name: "PLINKO GOD", sats: 18200},
-  {name: "BITCOIN DROP", sats: 13700},
-  {name: "LIGHTNING WIN", sats: 9800},
-  {name: "JACKPOT HUNTER", sats: 7600}
+const LB = [
+  {name:'BTC KING',   sats:96000},
+  {name:'SATOSHI',    sats:48200},
+  {name:'HODLR',      sats:31700},
+  {name:'LN GOD',     sats:19400},
+  {name:'PLINKO ACE', sats:12100},
 ];
 
-// Initialize Matter.js
-function initMatter() {
-  canvas = document.getElementById('canvas');
-  ctx = canvas.getContext('2d');
+// ── GEOMETRY ──────────────────────────────────────────────────
+function getPegPositions() {
+  const rows = [];
+  const spacingY = (SLOT_Y - 16 - BOARD_TOP) / (ROWS - 1);
+  for (let r = 0; r < ROWS; r++) {
+    const y    = BOARD_TOP + r * spacingY;
+    const cols = r + 2;
+    const tw   = (cols - 1) * GAP;
+    const x0   = W / 2 - tw / 2;
+    for (let c = 0; c < cols; c++) rows.push({ x: x0 + c * GAP, y });
+  }
+  return rows;
+}
 
-  engine = Engine.create();
-  world = engine.world;
+function getSlotGeometry() {
+  const lastCols = ROWS + 1;   // 13 pegs in last row
+  const tw  = (lastCols - 1) * GAP;
+  const x0  = W / 2 - tw / 2 - GAP / 2;  // half-gap extension on each side
+  const sw  = (tw + GAP) / (ROWS + 1);    // 13 slots
+  return { x0, sw };
+}
+
+// ── INIT MATTER ───────────────────────────────────────────────
+function initMatter() {
+  engine = Engine.create({ gravity: { y: 1.5 } });
+  world  = engine.world;
   runner = Runner.create();
 
-  // Walls
-  const wallOptions = { isStatic: true, render: { fillStyle: '#4a32a0' } };
+  const W_OPT = { isStatic: true, friction: 0, restitution: 0.1 };
   World.add(world, [
-    Bodies.rectangle(canvas.width/2, -10, canvas.width, 20, wallOptions), // top
-    Bodies.rectangle(canvas.width/2, canvas.height + 10, canvas.width, 20, wallOptions), // bottom
-    Bodies.rectangle(-10, canvas.height/2, 20, canvas.height, wallOptions), // left
-    Bodies.rectangle(canvas.width + 10, canvas.height/2, 20, canvas.height, wallOptions) // right
+    Bodies.rectangle(W/2, -10, W,  20, W_OPT),
+    Bodies.rectangle(W/2, H+10, W, 20, W_OPT),
+    Bodies.rectangle(-10, H/2, 20, H,  W_OPT),
+    Bodies.rectangle(W+10,H/2, 20, H,  W_OPT),
   ]);
 
-  createPegsAndDividers();
+  getPegPositions().forEach(({ x, y }) => {
+    const p = Bodies.circle(x, y, PEG_PHYS, {
+      isStatic: true, restitution: 0.6, friction: 0, label: 'peg'
+    });
+    pegs.push(p);
+    World.add(world, p);
+  });
+
+  Events.on(engine, 'collisionStart', ev => {
+    ev.pairs.forEach(pair => {
+      const b = balls.find(b => b === pair.bodyA || b === pair.bodyB);
+      if (!b || b._landed) return;
+      if (b.position.y > SLOT_Y - 24) {
+        b._landed = true;
+        handleLanding(b);
+      }
+    });
+  });
+
   Runner.run(runner, engine);
   requestAnimationFrame(renderLoop);
 }
 
-function createPegsAndDividers() {
-  // Clear previous
-  Composite.clear(world, false);
-
-  pegs = [];
-  const spacingY = 34;
-  const startY = 90;
-
-  for (let r = 0; r < rows; r++) {
-    const y = startY + r * spacingY;
-    const offset = (r % 2 === 0) ? 0 : 18;
-    const cols = 11 + (r % 2);
-
-    for (let c = 0; c < cols; c++) {
-      const x = 55 + offset + c * 36;
-      const peg = Bodies.circle(x, y, 8, {
-        isStatic: true,
-        render: { fillStyle: '#c084fc' }
-      });
-      pegs.push(peg);
-      World.add(world, peg);
-    }
+// ── SPAWN BALL ────────────────────────────────────────────────
+function spawnBall() {
+  if (freeDrops <= 0 && balance < currentBet) return false;
+  if (freeDrops > 0) {
+    freeDrops--;
+    document.getElementById('free-drops').textContent = freeDrops;
+  } else {
+    balance -= currentBet;
   }
-
-  // Bottom dividers / slots
-  dividers = [];
-  const slotWidth = (canvas.width - 80) / (rows + 1);
-  for (let i = 0; i <= rows; i++) {
-    const x = 40 + i * slotWidth;
-    const divider = Bodies.rectangle(x + slotWidth/2, canvas.height - 55, 6, 120, {
-      isStatic: true,
-      render: { fillStyle: '#4a32a0' }
-    });
-    dividers.push(divider);
-    World.add(world, divider);
-  }
-}
-
-function dropBall() {
-  if (balance < currentBet) {
-    alert("Not enough SATS! Deposit more via Lightning.");
-    return;
-  }
-
-  balance -= currentBet;
+  totalDrops++;
   updateUI();
 
   const ball = Bodies.circle(
-    canvas.width / 2 + (Math.random() * 80 - 40),
-    60,
-    13,
+    W / 2 + (Math.random() - 0.5) * 18,
+    18,
+    BALL_PHYS,
     {
-      restitution: 0.65,
-      friction: 0.01,
-      density: 0.8,
-      render: { fillStyle: '#ffaa00' }
+      restitution: 0.4,
+      friction: 0.005,
+      frictionAir: 0.012,
+      density: 1.0,
+      label: 'ball',
+      _landed: false,
+      _hue: 20 + Math.random() * 40,
     }
   );
-
-  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 4, y: 6 });
+  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 2, y: 5 });
   balls.push(ball);
   World.add(world, ball);
 
-  // Listen for collision with bottom area
-  Events.on(engine, 'collisionStart', (event) => {
-    event.pairs.forEach(pair => {
-      if (balls.includes(pair.bodyA) || balls.includes(pair.bodyB)) {
-        const ballBody = balls.includes(pair.bodyA) ? pair.bodyA : pair.bodyB;
-        if (ballBody.position.y > canvas.height - 120) {
-          handleLanding(ballBody);
-        }
-      }
-    });
-  });
+  setTimeout(() => {
+    if (!ball._landed) { ball._landed = true; handleLanding(ball); }
+  }, 10000);
+  return true;
 }
 
+// ── LANDING ───────────────────────────────────────────────────
 function handleLanding(ball) {
-  // Remove from world after landing
-  setTimeout(() => {
-    World.remove(world, ball);
-    const idx = balls.indexOf(ball);
-    if (idx > -1) balls.splice(idx, 1);
-  }, 800);
+  const { x0, sw } = getSlotGeometry();
+  let slot = Math.floor((ball.position.x - x0) / sw);
+  slot = Math.max(0, Math.min(MULT.length - 1, slot));
 
-  const slot = Math.floor((ball.position.x - 35) / ((canvas.width - 70) / (rows + 1)));
-  let mult = multipliers[Math.max(0, Math.min(multipliers.length-1, slot))] || 5;
-
-  if (risk === "low") mult = Math.max(0.5, mult * 0.6);
-  if (risk === "high") mult *= 1.4;
-
-  const win = Math.floor(currentBet * mult);
-
-  balance += win;
+  const mult = MULT[slot];
+  const win  = Math.floor(currentBet * mult);
+  balance    += win;
   sessionWon += win;
+  history.unshift({ mult, win });
+  if (history.length > 6) history.pop();
 
   updateUI();
+  renderHistory();
+  showToast(mult, win);
+  if (win >= currentBet * 5) triggerConfetti();
 
-  const resultEl = document.getElementById('result');
-  if (mult >= 500) {
-    resultEl.innerHTML = `🎉 JACKPOT!<br>+${win.toLocaleString()} SATS (${mult.toFixed(0)}x)`;
-    resultEl.className = "result jackpot";
-    createExplosion(ball.position.x, ball.position.y);
-  } else if (win > currentBet * 3) {
-    resultEl.innerHTML = `BIG WIN!<br>+${win.toLocaleString()} SATS`;
-    resultEl.className = "result win";
-  } else if (win > 0) {
-    resultEl.textContent = `WIN +${win.toLocaleString()} SATS`;
-    resultEl.className = "result win";
+  setTimeout(() => {
+    World.remove(world, ball);
+    const i = balls.indexOf(ball);
+    if (i > -1) balls.splice(i, 1);
+
+    if (autoRunning) {
+      autoTimer = setTimeout(() => {
+        if (autoRunning) {
+          if (!spawnBall()) stopAuto();
+        }
+      }, 150 + Math.random() * 200);
+    }
+  }, 700);
+}
+
+// ── MODE / PLAY ───────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-manual').className = 'mode-btn' + (m === 'manual' ? ' active' : '');
+  document.getElementById('btn-auto').className   = 'mode-btn' + (m === 'auto'   ? ' active' : '');
+  if (m === 'manual') stopAuto();
+  updatePlayBtn();
+}
+
+function handlePlay() {
+  if (mode === 'manual') {
+    spawnBall();
   } else {
-    resultEl.textContent = "BETTER LUCK NEXT TIME";
-    resultEl.className = "result";
-  }
-
-  if (win > 5000) {
-    // Trigger share prompt
-    setTimeout(() => {
-      if (confirm("Amazing win! Share on X?")) {
-        shareWin(win, mult);
-      }
-    }, 1200);
+    autoRunning ? stopAuto() : startAuto();
   }
 }
 
-function createExplosion(x, y) {
-  for (let i = 0; i < 120; i++) {
-    const p = Bodies.circle(x, y, 4 + Math.random()*6, {
-      isStatic: false,
-      restitution: 0.9
-    });
-    Body.setVelocity(p, {
-      x: (Math.random() - 0.5) * 18,
-      y: (Math.random() - 0.5) * 18 - 5
-    });
-    World.add(world, p);
-    setTimeout(() => World.remove(world, p), 1800);
+function startAuto() {
+  autoRunning = true;
+  document.getElementById('btn-auto').className = 'mode-btn auto-on';
+  updatePlayBtn();
+  spawnBall();
+}
+
+function stopAuto() {
+  autoRunning = false;
+  clearTimeout(autoTimer);
+  document.getElementById('btn-auto').className = 'mode-btn' + (mode === 'auto' ? ' active' : '');
+  updatePlayBtn();
+}
+
+function updatePlayBtn() {
+  const btn = document.getElementById('play-btn');
+  if (mode === 'manual') {
+    btn.textContent = '⚡ PLAY';
+    btn.className   = 'play-btn manual';
+  } else if (autoRunning) {
+    btn.textContent = '⏹ STOP';
+    btn.className   = 'play-btn auto-running';
+  } else {
+    btn.textContent = '⟳ AUTO START';
+    btn.className   = 'play-btn manual';
   }
 }
 
+function setBet(amount, el) {
+  currentBet = amount;
+  document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── UI ────────────────────────────────────────────────────────
+function updateUI() {
+  document.getElementById('balance').textContent    = Math.floor(balance).toLocaleString();
+  document.getElementById('won').textContent        = Math.floor(sessionWon).toLocaleString();
+  document.getElementById('drop-count').textContent = totalDrops;
+}
+
+function showToast(mult, win) {
+  const toast  = document.getElementById('toast');
+  const multEl = document.getElementById('toast-mult');
+  const satsEl = document.getElementById('toast-sats');
+  multEl.textContent = mult + 'x';
+  multEl.className   = mult >= 5 ? 'toast-mult jackpot-text' : 'toast-mult';
+  satsEl.textContent = (win > 0 ? '+' : '') + win.toLocaleString() + ' SATS';
+  satsEl.style.color = win < currentBet ? '#ff5f7a' : '#0affee';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1200);
+}
+
+function renderHistory() {
+  document.getElementById('history-list').innerHTML = history.slice(0,5).map(h => {
+    const cls = h.mult >= 5 ? 'big' : h.mult >= 1 ? 'mid' : 'low';
+    return `<div class="history-item">
+      <span class="hist-mult ${cls}">${h.mult}x</span>
+      <span class="hist-sats">${h.win >= 0?'+':''}${h.win.toLocaleString()}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderLeaderboard() {
+  const ranks = ['gold','silver','bronze','',''];
+  document.getElementById('leaderboard').innerHTML = LB.map((e,i) =>
+    `<div class="lb-item">
+      <span class="lb-rank ${ranks[i]}">${i+1}</span>
+      <span class="lb-name">${e.name}</span>
+      <span class="lb-sats">${(e.sats/1000).toFixed(1)}K</span>
+    </div>`
+  ).join('');
+}
+
+// ── RENDER ────────────────────────────────────────────────────
 function renderLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#13131f';
+  ctx.fillRect(0, 0, W, H);
 
-  // Background glow
-  ctx.fillStyle = '#0a001f';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // grid
+  ctx.strokeStyle = 'rgba(255,255,255,.018)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 44) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+  }
 
-  // Draw pegs
-  ctx.fillStyle = '#c084fc';
-  pegs.forEach(peg => {
-    ctx.beginPath();
-    ctx.arc(peg.position.x, peg.position.y, 8, 0, Math.PI*2);
-    ctx.fill();
+  // pegs
+  getPegPositions().forEach(({x,y}) => {
+    const g = ctx.createRadialGradient(x,y,0,x,y,PEG_R+4);
+    g.addColorStop(0,'rgba(220,210,255,.85)');
+    g.addColorStop(.5,'rgba(160,140,240,.4)');
+    g.addColorStop(1,'rgba(80,60,180,0)');
+    ctx.beginPath(); ctx.arc(x,y,PEG_R+4,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,PEG_R,0,Math.PI*2); ctx.fillStyle='#ddd8ff'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x-1.5,y-1.5,2.2,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,.7)'; ctx.fill();
   });
 
-  // Draw balls
-  ctx.shadowBlur = 25;
-  ctx.shadowColor = '#ffaa00';
-  balls.forEach(ball => {
-    ctx.fillStyle = '#ffaa00';
+  // slots
+  const { x0, sw } = getSlotGeometry();
+  for (let i = 0; i < MULT.length; i++) {
+    const x   = x0 + i * sw;
+    const col = SLOT_COL[i];
+    const m   = MULT[i];
     ctx.beginPath();
-    ctx.arc(ball.position.x, ball.position.y, 13, 0, Math.PI*2);
+    if (ctx.roundRect) ctx.roundRect(x+1, SLOT_Y, sw-2, SLOT_H, 5);
+    else ctx.rect(x+1, SLOT_Y, sw-2, SLOT_H);
+    ctx.fillStyle   = col + '28';
     ctx.fill();
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = col;
+    ctx.lineWidth   = 1.5;
     ctx.stroke();
+    const label = m >= 10 ? m.toFixed(0)+'x' : m+'x';
+    ctx.fillStyle   = col;
+    ctx.font        = `bold ${sw > 26 ? 9 : 7}px Orbitron,monospace`;
+    ctx.textAlign   = 'center';
+    ctx.fillText(label, x + sw/2, SLOT_Y + 14);
+    ctx.beginPath(); ctx.arc(x+sw/2, SLOT_Y+30, 7, 0, Math.PI*2);
+    ctx.fillStyle = col+'44'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = col; ctx.font = 'bold 7px Arial';
+    ctx.fillText('₿', x+sw/2, SLOT_Y+33);
+  }
+
+  // balls
+  balls.forEach(ball => {
+    const {x,y} = ball.position;
+    const h     = ball._hue || 30;
+    const sg = ctx.createRadialGradient(x,y,0,x,y,BALL_R+8);
+    sg.addColorStop(0, `hsla(${h},100%,60%,.55)`);
+    sg.addColorStop(1, `hsla(${h},100%,60%,0)`);
+    ctx.beginPath(); ctx.arc(x,y,BALL_R+8,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+    const bg = ctx.createRadialGradient(x-3,y-3,1,x,y,BALL_R);
+    bg.addColorStop(0,   '#ffffff');
+    bg.addColorStop(.25, `hsl(${h},100%,75%)`);
+    bg.addColorStop(.7,  `hsl(${h},100%,50%)`);
+    bg.addColorStop(1,   `hsl(${h-20},90%,25%)`);
+    ctx.beginPath(); ctx.arc(x,y,BALL_R,0,Math.PI*2);
+    ctx.fillStyle=bg; ctx.fill();
+    ctx.strokeStyle=`hsla(${h},80%,85%,.5)`; ctx.lineWidth=1.5; ctx.stroke();
   });
-  ctx.shadowBlur = 0;
 
   requestAnimationFrame(renderLoop);
 }
 
-function updateUI() {
-  document.getElementById('balance').textContent = Math.floor(balance).toLocaleString();
-  document.getElementById('won').textContent = Math.floor(sessionWon).toLocaleString();
+// ── CONFETTI ──────────────────────────────────────────────────
+function triggerConfetti() {
+  const pc   = document.getElementById('particle-canvas');
+  const pctx = pc.getContext('2d');
+  pc.style.display = 'block';
+  pc.width  = window.innerWidth;
+  pc.height = window.innerHeight;
+  const cols = ['#ff6b00','#ffc700','#0affee','#ff2d55','#4cd964','#c084fc'];
+  const pts  = Array.from({length:100}, () => ({
+    x:Math.random()*pc.width, y:Math.random()*pc.height-pc.height,
+    vx:(Math.random()-.5)*7, vy:Math.random()*4+2,
+    r:Math.random()*5+3, col:cols[Math.floor(Math.random()*cols.length)],
+    rot:Math.random()*Math.PI*2, rv:(Math.random()-.5)*.2
+  }));
+  let f=0;
+  (function anim(){
+    if(++f>100){pc.style.display='none';return}
+    pctx.clearRect(0,0,pc.width,pc.height);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.rot+=p.rv;
+      pctx.save();pctx.translate(p.x,p.y);pctx.rotate(p.rot);
+      pctx.fillStyle=p.col;pctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*2);pctx.restore();
+    });
+    requestAnimationFrame(anim);
+  })();
 }
 
-function setBet(amount) {
-  currentBet = amount;
-  document.querySelectorAll('.bet-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === amount));
-}
-
-function resetGame() {
-  rows = parseInt(document.getElementById('rows').value);
-  risk = document.getElementById('risk').value;
-  createPegsAndDividers();
-}
-
-function shareWin(win, mult) {
-  const text = `⚡ Just hit ${mult.toFixed(0)}x in SATS PLINKO!\nWon ${win.toLocaleString()} SATS 🔥\nTry it yourself → https://ck121212195.github.io/Plinko-Bitcoin/ #Bitcoin #LightningNetwork`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-}
-
-// Init
+// ── BOOT ──────────────────────────────────────────────────────
 window.onload = () => {
   initMatter();
   updateUI();
-
-  // Demo ball
-  setTimeout(() => {
-    const demoBall = Bodies.circle(canvas.width/2, 60, 13, { restitution: 0.65, render: { fillStyle: '#ffaa00' }});
-    Body.setVelocity(demoBall, {x: 2, y: 5});
-    balls.push(demoBall);
-    World.add(world, demoBall);
-  }, 600);
-
+  renderHistory();
   renderLeaderboard();
+  // demo ball
+  setTimeout(() => {
+    const d = Bodies.circle(W/2, 18, BALL_PHYS, {
+      restitution:.4, friction:.005, frictionAir:.012, density:1, label:'ball', _landed:false, _hue:30
+    });
+    Body.setVelocity(d, {x:1.2, y:5});
+    balls.push(d);
+    World.add(world, d);
+    setTimeout(()=>{if(!d._landed){d._landed=true;handleLanding(d);}}, 10000);
+  }, 400);
 };
-
-function renderLeaderboard() {
-  const html = leaderboard.map((entry, i) => `
-    <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,215,0,0.08);margin-bottom:6px;border-radius:6px;">
-      <span>${['👑','🥈','🥉','4','5'][i] || i+1}</span>
-      <span>${entry.name}</span>
-      <span style="color:#ffd700">${entry.sats.toLocaleString()} sats</span>
-    </div>
-  `).join('');
-  document.getElementById('leaderboard').innerHTML = html;
-}
 </script>
 </body>
 </html>
