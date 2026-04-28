@@ -16,9 +16,6 @@
     gtag('config', 'G-MYW872C1Y2');
   </script>
 
-  <!-- ==========================================
-       👇 ここに OGP画像 と Favicon を設定 👇
-  =========================================== -->
   <meta name="description" content="Drop the ball, hit the multipliers, and stack real Sats! Experience the thrill of Plinko powered by the Bitcoin Lightning Network.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ck121212195.github.io/Plinko-Bitcoin/">
@@ -109,6 +106,16 @@
     .play-btn:hover{transform:translateY(-2px)}
     .play-btn:active{transform:translateY(1px)}
     
+    /* 物理パラメーター設定パネル用スタイル */
+    .physics-panel { width: calc(100% - 32px); max-width: 448px; margin: 0 auto 12px; background: var(--bg-card); border-radius: 12px; border: 1px solid rgba(255,255,255,.1); overflow: hidden; position:relative; z-index:2; }
+    .panel-header { padding: 12px; font-size: 12px; font-family: 'Orbitron', monospace; font-weight: 700; color: var(--cyan); cursor: pointer; text-align: center; background: rgba(0,0,0,0.3); transition: 0.2s; letter-spacing: 1px; }
+    .panel-header:hover { background: rgba(0,0,0,0.5); color: #fff; }
+    .panel-content { padding: 16px; font-size: 11px; border-top: 1px solid rgba(255,255,255,.05); display: none; }
+    .phys-desc { margin-bottom: 16px; color: var(--yellow); font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .panel-content label { display: flex; justify-content: space-between; margin-top: 10px; font-weight: 700; color: var(--text); font-size: 12px; }
+    .panel-content input[type=range] { width: 100%; margin: 8px 0 2px; accent-color: var(--cyan); }
+    .phys-help { font-size: 10px; color: var(--muted); margin-bottom: 12px; line-height: 1.3; }
+
     .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px; position:relative; z-index:2;}
     .panel{background:var(--bg-card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
     .panel-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -241,6 +248,30 @@
   <button class="play-btn manual" id="play-btn" onclick="handlePlay()" data-i18n="play">
     ⚡ PLAY
   </button>
+</div>
+
+<!-- 物理パラメーター設定 UI (手動で自由にテスト可能) -->
+<div class="physics-panel">
+  <div class="panel-header" onclick="togglePhysics()">⚙️ PHYSICS SETTINGS (DEBUG)</div>
+  <div class="panel-content" id="physics-content">
+    <p class="phys-desc">リアルタイムで物理挙動を調整できます。「無重力で横にすっ飛ぶ」のを防ぐには、重力を上げ、各反発を減らしてください。</p>
+    
+    <label>重力 (Gravity Y): <span id="val-gravity">3.0</span></label>
+    <input type="range" id="inp-gravity" min="0.5" max="6.0" step="0.1" value="3.0" oninput="updatePhysics()">
+    <p class="phys-help">下に引っ張る力。数値を大きくするほど地球のようにズシンと落ち、横に飛ぶのを防ぎます。</p>
+
+    <label>ボール反発係数 (Ball Restitution): <span id="val-ball-rest">0.05</span></label>
+    <input type="range" id="inp-ball-rest" min="0" max="1" step="0.01" value="0.05" oninput="updatePhysics()">
+    <p class="phys-help">ボール自体の弾みやすさ。0で跳ねず、1でスーパーボールのように跳ねまくります。</p>
+
+    <label>ピン反発係数 (Peg Restitution): <span id="val-peg-rest">0.01</span></label>
+    <input type="range" id="inp-peg-rest" min="0" max="1" step="0.01" value="0.01" oninput="updatePhysics()">
+    <p class="phys-help">ピンに当たった時にボールを弾き返す力。これを入れると横に飛ばなくなります。</p>
+
+    <label>空気抵抗 (Friction Air): <span id="val-friction-air">0.04</span></label>
+    <input type="range" id="inp-friction-air" min="0" max="0.1" step="0.001" value="0.04" oninput="updatePhysics()">
+    <p class="phys-help">落下中の空気抵抗。少し上げると横滑り（スライド）を抑えられます。</p>
+  </div>
 </div>
 
 <div class="bottom-section">
@@ -709,7 +740,6 @@ const SLOT_H    = 48;
 const SLOT_Y    = H - SLOT_H - 6;
 
 // ── HOUSE EDGE TABLE ─────────────────────────────────────────
-// 確率の低い「端」を高倍率に、確率の高い「中央」を低倍率に設定。EV ≈ 0.59x (House Edge ~41%)
 const MULT     =[20,  8.0, 2.0, 1.0, 0.5, 0.5, 0.2, 0.5, 0.5, 1.0, 2.0, 8.0, 20];
 const SLOT_COL =['#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee'];
 
@@ -727,6 +757,36 @@ let history    =[];
 let engine, runner, world;
 let pegs  =[];
 let physicalBalls =[];
+
+// ⬇️ 物理設定用の変数（地球の重力っぽくストンと落とす設定）
+let physGravity = 3.0;        // 重力を2倍に強め（地球のような落下速度へ）
+let physBallRest = 0.05;      // ボールの反発を極小に（跳ねない）
+let physPegRest = 0.01;       // ピンの弾き返しを極小に（横っ飛び防止）
+let physFrictionAir = 0.04;   // 落下抵抗を少し上げ横滑り防止
+
+// ── 物理パラメーターUI操作用関数 ────────────────────────────────
+function togglePhysics() {
+  const c = document.getElementById('physics-content');
+  c.style.display = c.style.display === 'none' ? 'block' : 'none';
+}
+
+function updatePhysics() {
+  physGravity = parseFloat(document.getElementById('inp-gravity').value);
+  physBallRest = parseFloat(document.getElementById('inp-ball-rest').value);
+  physPegRest = parseFloat(document.getElementById('inp-peg-rest').value);
+  physFrictionAir = parseFloat(document.getElementById('inp-friction-air').value);
+
+  document.getElementById('val-gravity').innerText = physGravity.toFixed(1);
+  document.getElementById('val-ball-rest').innerText = physBallRest.toFixed(2);
+  document.getElementById('val-peg-rest').innerText = physPegRest.toFixed(2);
+  document.getElementById('val-friction-air').innerText = physFrictionAir.toFixed(3);
+
+  // 実行中のエンジンに変更を反映
+  if (engine) engine.gravity.y = physGravity;
+  
+  // すでに生成されているピン(PEG)に変更を反映
+  pegs.forEach(p => { p.restitution = physPegRest; });
+}
 
 // ── GEOMETRY ──────────────────────────────────────────────────
 function getPegPositions() {
@@ -752,7 +812,8 @@ function getSlotGeometry() {
 
 // ── INIT MATTER ───────────────────────────────────────────────
 function initMatter() {
-  engine = Engine.create({ gravity: { y: 1.5 } });
+  // 初期設定として強めの重力（physGravity = 3.0）を適用
+  engine = Engine.create({ gravity: { y: physGravity } });
   world  = engine.world;
   runner = Runner.create();
 
@@ -765,9 +826,9 @@ function initMatter() {
   ]);
 
   getPegPositions().forEach(({ x, y }) => {
-    // ⬇️ 反発係数 (restitution) を 0.05 まで下げて無駄な跳ねを防止
+    // ⬇️ パラメータ変数を使用
     const p = Bodies.circle(x, y, PEG_PHYS, {
-      isStatic: true, restitution: 0.05, friction: 0.05, label: 'peg'
+      isStatic: true, restitution: physPegRest, friction: 0.05, label: 'peg'
     });
     pegs.push(p);
     World.add(world, p);
@@ -799,7 +860,6 @@ function spawnBall() {
     document.getElementById('free-drops').textContent = freeDrops;
     actualBet = currentBet;
   } else {
-    // 残高が足りない場合は ALL IN
     if (balance < currentBet) {
       actualBet = balance;
     }
@@ -809,15 +869,15 @@ function spawnBall() {
   totalDrops++;
   updateUI();
 
-  // ⬇️ 位置ブレを狭め (1.5)、restitution (0.1) に下げ、空気抵抗 (0.035) を上げる
+  // ⬇️ 変数化されたパラメーターを使ってボールを生成
   const ball = Bodies.circle(
-    W / 2 + (Math.random() - 0.5) * 1.5,
+    W / 2 + (Math.random() - 0.5) * 1.5, // 落とす位置の左右ブレを極力狭く
     18,
     BALL_PHYS,
     {
-      restitution: 0.1,
+      restitution: physBallRest,
       friction: 0.005,
-      frictionAir: 0.035,
+      frictionAir: physFrictionAir,
       density: 1.5,
       label: 'ball',
       _landed: false,
@@ -825,7 +885,7 @@ function spawnBall() {
       _bet: actualBet
     }
   );
-  // ⬇️ 初速の横ブレも極力抑える
+  
   Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.1, y: 1.5 });
   physicalBalls.push(ball);
   World.add(world, ball);
@@ -947,20 +1007,6 @@ function showToast(mult, win, isDeposit = false) {
   satsEl.textContent = '+' + win.toLocaleString() + ' SATS';
   satsEl.style.color = (!isDeposit && win < currentBet) ? '#ff5f7a' : '#0affee';
   
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 1500);
-}
-
-function showErrorToast(msg) {
-  const toast  = document.getElementById('toast');
-  const multEl = document.getElementById('toast-mult');
-  const satsEl = document.getElementById('toast-sats');
-  multEl.textContent = "!";
-  multEl.className   = 'toast-mult';
-  multEl.style.color = '#ff2d55';
-  multEl.style.fontSize = '32px';
-  satsEl.textContent = msg;
-  satsEl.style.color = '#ff2d55';
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 1500);
 }
