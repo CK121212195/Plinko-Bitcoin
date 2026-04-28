@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -21,6 +21,15 @@
     .ln-badge{background:linear-gradient(135deg,#f7931a,#ffb84d);color:#000;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;letter-spacing:1px;display:flex;align-items:center;gap:5px}
     .ln-dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 1.2s infinite}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+    
+    /* Top Actions (Wallet, Share, Lang) */
+    .top-actions { width: 100%; max-width: 480px; padding: 0 16px 12px; display: flex; gap: 8px; justify-content: center; align-items: center; }
+    .action-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family:'Orbitron',monospace; transition: 0.2s;}
+    .action-btn:hover { background: rgba(255,255,255,.1); border-color: var(--cyan); color: var(--cyan); }
+    .lang-selector { display: flex; gap: 4px; margin-left: auto; }
+    .lang-btn { background: transparent; border: 1px solid var(--muted); color: var(--muted); border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; font-family:'Orbitron',monospace; transition: 0.2s; }
+    .lang-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(10,255,238,0.1); }
+
     .stats-row{width:100%;max-width:480px;padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
     .stat-card{background:var(--bg-card);border-radius:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
     .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
@@ -38,10 +47,12 @@
     .bonus-count{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--yellow);line-height:1}
     .game-wrapper{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:var(--bg-mid);border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;position:relative}
     canvas{display:block;width:100%;height:auto}
+    
     .toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(12,12,20,.95);border-radius:14px;padding:16px 28px;text-align:center;border:2px solid var(--orange);pointer-events:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1);z-index:10}
     .toast.show{transform:translate(-50%,-50%) scale(1)}
     .toast-mult{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--yellow)}
     .toast-sats{font-size:16px;font-weight:700;color:var(--cyan);margin-top:4px}
+    
     .controls{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px}
     .mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
     .mode-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 10px;color:var(--text);font-family:'Orbitron',monospace;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
@@ -62,6 +73,7 @@
     .play-btn:hover::before{left:100%}
     .play-btn:hover{transform:translateY(-2px)}
     .play-btn:active{transform:translateY(1px)}
+    
     .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .panel{background:var(--bg-card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
     .panel-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -83,9 +95,34 @@
     .lb-rank.bronze{color:#cd7f32}
     .lb-name{flex:1;font-weight:600;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .lb-sats{font-family:'Orbitron',monospace;font-size:10px;color:var(--yellow);font-weight:700}
-    .footer{width:100%;max-width:480px;padding:10px 20px 24px;display:flex;justify-content:center;gap:24px}
-    .footer a{color:var(--cyan);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:1px;opacity:.7;transition:opacity .2s}
-    .footer a:hover{opacity:1}
+    
+    /* Other Games Section */
+    .more-games { width: calc(100% - 32px); max-width: 448px; margin: 20px auto 10px; }
+    .mg-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; text-align: center; letter-spacing: 2px; }
+    .mg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mg-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 8px; text-align: center; text-decoration: none; transition: all 0.2s; }
+    .mg-card:hover { border-color: var(--cyan); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(10,255,238,0.1); }
+    .mg-icon { font-size: 24px; margin-bottom: 8px; }
+    .mg-name { font-size: 11px; font-weight: 700; color: var(--text); font-family: 'Orbitron', monospace; }
+
+    /* Modals */
+    .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(12,12,20,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal.show { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--bg-card); border: 1px solid rgba(255,107,0,0.5); border-radius: 16px; padding: 24px; width: 90%; max-width: 360px; text-align: center; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .close-btn { position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+    .modal h2 { font-family: 'Orbitron', monospace; color: var(--yellow); margin-bottom: 16px; }
+    .modal p { color: var(--text); font-size: 15px; margin-bottom: 24px; line-height: 1.6; text-align: left; display: inline-block; }
+    .modal-btn { background: linear-gradient(135deg,#ff6b00,#ff2d55); border: none; border-radius: 8px; color: #fff; padding: 14px 24px; font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
+    .modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(255,107,0,0.4); }
+    
+    .wallet-section h3 { color: var(--muted); font-size: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+    .wallet-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text); padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 8px; cursor: pointer; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 14px; transition: all 0.2s; }
+    .wallet-btn:hover { background: rgba(255,107,0,0.2); border-color: var(--orange); color: var(--yellow); }
+    .wallet-btn.withdraw { background: rgba(10,255,238,0.1); border-color: var(--cyan); color: var(--cyan); margin-top: 10px; }
+    .wallet-btn.withdraw:hover { background: rgba(10,255,238,0.2); }
+
+    .credits { text-align:center; margin: 10px 0 30px; display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'Orbitron', monospace; }
+    
     @keyframes jackpot{0%,100%{color:var(--yellow)}33%{color:#ff2d55}66%{color:var(--cyan)}}
     .jackpot-text{animation:jackpot .35s infinite}
     #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;display:none}
@@ -99,15 +136,28 @@
   <div class="ln-badge"><div class="ln-dot"></div>BTC LN</div>
 </div>
 
+<div class="top-actions">
+  <button class="action-btn" onclick="openWallet()">💳 <span data-i18n="wallet">WALLET</span></button>
+  <button class="action-btn" onclick="shareOnX()">𝕏 <span data-i18n="share">SHARE</span></button>
+  <div class="lang-selector">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ja')">JA</button>
+    <button class="lang-btn" onclick="setLang('ko')">KO</button>
+  </div>
+</div>
+
 <div class="stats-row">
-  <div class="stat-card balance"><div class="stat-label">Balance</div><div class="stat-value" id="balance">30,000</div></div>
-  <div class="stat-card won"><div class="stat-label">Won</div><div class="stat-value" id="won">0</div></div>
-  <div class="stat-card drops"><div class="stat-label">Drops</div><div class="stat-value" id="drop-count">0</div></div>
+  <div class="stat-card balance"><div class="stat-label" data-i18n="balance">Balance</div><div class="stat-value" id="balance">0</div></div>
+  <div class="stat-card won"><div class="stat-label" data-i18n="won">Won</div><div class="stat-value" id="won">0</div></div>
+  <div class="stat-card drops"><div class="stat-label" data-i18n="balls">Balls</div><div class="stat-value" id="drop-count">20</div></div>
 </div>
 
 <div class="bonus-banner">
-  <div><div class="bonus-left">⚡ Welcome Bonus</div><div class="bonus-sub">Free drops included</div></div>
-  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub">FREE</div></div>
+  <div>
+    <div class="bonus-left" data-i18n="bonus_title">⚡ Welcome Bonus</div>
+    <div class="bonus-sub" data-i18n="bonus_sub">Free balls included</div>
+  </div>
+  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub" data-i18n="balls">BALLS</div></div>
 </div>
 
 <div class="game-wrapper">
@@ -120,19 +170,19 @@
 
 <div class="controls">
   <div class="mode-row">
-    <button class="mode-btn active" id="btn-manual" onclick="setMode('manual')">
+    <button class="mode-btn active" id="btn-manual" onclick="setMode('manual')" data-i18n="manual">
       ▶ MANUAL<span class="sub">1 DROP / TAP</span>
     </button>
-    <button class="mode-btn" id="btn-auto" onclick="setMode('auto')">
+    <button class="mode-btn" id="btn-auto" onclick="setMode('auto')" data-i18n="auto">
       ⟳ AUTO<span class="sub">CONTINUOUS</span>
     </button>
   </div>
 
   <div class="bet-section">
-    <div class="section-label">Bet per Drop (sats)</div>
+    <div class="section-label" data-i18n="bet_label">Bet per Drop (sats)</div>
     <div class="bet-grid">
-      <button class="bet-btn" onclick="setBet(100,this)">100<span>sats</span></button>
-      <button class="bet-btn active" onclick="setBet(500,this)">500<span>sats</span></button>
+      <button class="bet-btn active" onclick="setBet(100,this)">100<span>sats</span></button>
+      <button class="bet-btn" onclick="setBet(500,this)">500<span>sats</span></button>
       <button class="bet-btn" onclick="setBet(1000,this)">1K<span>sats</span></button>
       <button class="bet-btn" onclick="setBet(5000,this)">5K<span>sats</span></button>
       <button class="bet-btn" onclick="setBet(10000,this)">10K<span>sats</span></button>
@@ -140,22 +190,167 @@
     </div>
   </div>
 
-  <button class="play-btn manual" id="play-btn" onclick="handlePlay()">
+  <button class="play-btn manual" id="play-btn" onclick="handlePlay()" data-i18n="play">
     ⚡ PLAY
   </button>
 </div>
 
 <div class="bottom-section">
-  <div class="panel"><div class="panel-title">Recent</div><div id="history-list"></div></div>
-  <div class="panel"><div class="panel-title">Top Wins</div><div id="leaderboard"></div></div>
+  <div class="panel"><div class="panel-title" data-i18n="recent">Recent</div><div id="history-list"></div></div>
+  <div class="panel"><div class="panel-title" data-i18n="top_wins">Top Wins</div><div id="leaderboard"></div></div>
 </div>
 
-<div class="footer">
-  <a href="https://ck121212195.github.io/LNbits_slot2/">← Slot</a>
-  <a href="https://ck121212195.github.io/Bitcoin-Run/">Run →</a>
+<div class="more-games">
+  <div class="mg-title" data-i18n="other_games">OTHER GAMES</div>
+  <div class="mg-grid">
+    <a href="https://ck121212195.github.io/LNbits_slot2/" target="_blank" class="mg-card">
+      <div class="mg-icon">🎰</div>
+      <div class="mg-name">Lightning Slot</div>
+    </a>
+    <a href="https://ck121212195.github.io/Bitcoin-Run/" target="_blank" class="mg-card">
+      <div class="mg-icon">🏃‍♂️</div>
+      <div class="mg-name">Bitcoin Run</div>
+    </a>
+    <a href="https://ck121212195.github.io/omikuji_japan_only/" target="_blank" class="mg-card">
+      <div class="mg-icon">⛩️</div>
+      <div class="mg-name">Omikuji</div>
+    </a>
+  </div>
+</div>
+
+<div class="credits">
+  <div style="font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+    <span>⚡</span> Bitcoin Lightning Network
+  </div>
+  <div style="font-size:10px; color:var(--muted); display:flex; align-items:center; gap:6px; margin-top:4px;">
+    <span>🔥</span> THE FIAT BURNER <span style="opacity:0.5;">·</span> Not financial advice. Have fun. Stack sats. 💎
+  </div>
+</div>
+
+<!-- How To Play Modal -->
+<div id="how-to-modal" class="modal show">
+  <div class="modal-content">
+    <h2 data-i18n="how_to_title">HOW TO PLAY</h2>
+    <p data-i18n="how_to_desc">
+      1. Select your bet.<br>
+      2. Drop the ball.<br>
+      3. Win sats based on the multiplier!
+    </p>
+    <button class="modal-btn" onclick="startGame()" data-i18n="start_game">START GAME</button>
+  </div>
+</div>
+
+<!-- Wallet Modal -->
+<div id="wallet-modal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeWallet()">×</button>
+    <h2 data-i18n="wallet">WALLET</h2>
+    
+    <div class="wallet-section">
+      <h3 data-i18n="deposit">DEPOSIT</h3>
+      <button class="wallet-btn" onclick="buyBalls(1000, 20)">1000 sats ➔ 20 Balls</button>
+      <button class="wallet-btn" onclick="buyBalls(5000, 120)">5000 sats ➔ 120 Balls</button>
+      <button class="wallet-btn" onclick="buyBalls(10000, 500)">10000 sats ➔ 500 Balls</button>
+    </div>
+
+    <div class="wallet-section" style="margin-top:20px">
+      <h3 data-i18n="withdraw">WITHDRAW</h3>
+      <button class="wallet-btn withdraw" onclick="withdrawSats()">Withdraw All Sats</button>
+    </div>
+  </div>
 </div>
 
 <script>
+// ── i18n Dictionary ───────────────────────────────────────────
+const i18n = {
+  en: {
+    balance: "Balance", won: "Won", balls: "Balls",
+    bonus_title: "⚡ Welcome Bonus", bonus_sub: "Free balls included",
+    manual: "▶ MANUAL<span class=\"sub\">1 DROP / TAP</span>",
+    auto: "⟳ AUTO<span class=\"sub\">CONTINUOUS</span>",
+    bet_label: "Bet per Drop (sats)",
+    play: "⚡ PLAY", stop: "⏹ STOP", auto_start: "⟳ AUTO START",
+    recent: "Recent", top_wins: "Top Wins",
+    how_to_title: "HOW TO PLAY",
+    how_to_desc: "1. Select your bet.<br>2. Drop the ball.<br>3. Win sats based on the multiplier!",
+    start_game: "START GAME",
+    wallet: "WALLET", deposit: "DEPOSIT", withdraw: "WITHDRAW",
+    other_games: "OTHER GAMES", share: "SHARE"
+  },
+  ja: {
+    balance: "残高", won: "獲得", balls: "ボール",
+    bonus_title: "⚡ ウェルカムボーナス", bonus_sub: "無料ボールプレゼント",
+    manual: "▶ 手動<span class=\"sub\">1タップ1球</span>",
+    auto: "⟳ オート<span class=\"sub\">連続プレイ</span>",
+    bet_label: "1球あたりの賭け額 (sats)",
+    play: "⚡ プレイ", stop: "⏹ 停止", auto_start: "⟳ オート開始",
+    recent: "最近の履歴", top_wins: "トップ勝利",
+    how_to_title: "遊び方",
+    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落とします。<br>3. 倍率に応じてSatsを獲得！",
+    start_game: "ゲーム開始",
+    wallet: "ウォレット", deposit: "入金", withdraw: "出金",
+    other_games: "他のゲーム", share: "シェア"
+  },
+  ko: {
+    balance: "잔액", won: "획득", balls: "볼",
+    bonus_title: "⚡ 웰컴 보너스", bonus_sub: "무료 볼 포함",
+    manual: "▶ 수동<span class=\"sub\">1탭 1구</span>",
+    auto: "⟳ 자동<span class=\"sub\">연속 플레이</span>",
+    bet_label: "1구당 배팅액 (sats)",
+    play: "⚡ 플레이", stop: "⏹ 정지", auto_start: "⟳ 자동 시작",
+    recent: "최근 기록", top_wins: "최고 승리",
+    how_to_title: "게임 방법",
+    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨리세요.<br>3. 배수에 따라 Sats를 획득하세요!",
+    start_game: "게임 시작",
+    wallet: "지갑", deposit: "입금", withdraw: "출금",
+    other_games: "다른 게임", share: "공유"
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+  });
+  updatePlayBtn();
+}
+
+// ── Modals & Social ───────────────────────────────────────────
+function startGame() {
+  document.getElementById('how-to-modal').classList.remove('show');
+}
+
+function openWallet() { document.getElementById('wallet-modal').classList.add('show'); }
+function closeWallet() { document.getElementById('wallet-modal').classList.remove('show'); }
+
+function buyBalls(sats, amount) {
+  alert(`[Mock] Invoice Paid: ${sats} sats.\nAdded ${amount} Balls!`);
+  balls += amount;
+  updateUI();
+  closeWallet();
+}
+
+function withdrawSats() {
+  if(balance <= 0) return alert('No sats to withdraw!');
+  alert(`[Mock] Withdraw Success!\n${balance} sats sent to your wallet.`);
+  balance = 0;
+  updateUI();
+  closeWallet();
+}
+
+function shareOnX() {
+  const text = `I just won ${sessionWon} sats on PLINKO Lightning Sats! ⚡️🪙\nPlay now and stack sats!`;
+  const url = window.location.href;
+  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+  window.open(shareUrl, '_blank');
+}
+
 const { Engine, World, Bodies, Body, Events, Runner } = Matter;
 
 const gameCanvas = document.getElementById('canvas');
@@ -165,37 +360,34 @@ const H = gameCanvas.height;
 
 // ── LAYOUT CONSTANTS ──────────────────────────────────────────
 const ROWS      = 12;
-const PEG_R     = 5;        // visual peg radius
-const PEG_PHYS  = 4;        // physics peg radius (slightly smaller = easier bounce)
-const BALL_R    = 11;       // visual ball radius
-const BALL_PHYS = 10;       // physics ball radius
-const GAP       = 32;       // horizontal peg spacing
+const PEG_R     = 5;
+const PEG_PHYS  = 4;
+const BALL_R    = 11;
+const BALL_PHYS = 10;
+const GAP       = 32;
 const BOARD_TOP = 55;
 const SLOT_H    = 48;
 const SLOT_Y    = H - SLOT_H - 6;
 
 // ── HOUSE EDGE TABLE ─────────────────────────────────────────
-// 13 slots (ROWS+1), EV ≈ 0.60x → house edge ~40%
-// Symmetric. Edges near 0 to bleed balance.
-const MULT     = [0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2];
-const SLOT_COL = ['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
+const MULT     =[0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2];
+const SLOT_COL =['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
 
 // ── STATE ──────────────────────────────────────────────────────
-let balance    = 30000;
+let balance    = 0;
 let sessionWon = 0;
-let totalDrops = 0;
-let freeDrops  = 20;
-let currentBet = 500;
+let balls      = 20; // 1 ball = 100 sats value
+let currentBet = 100;
 let mode       = 'manual';
 let autoRunning= false;
 let autoTimer  = null;
-let history    = [];
+let history    =[];
 
 let engine, runner, world;
 let pegs  = [];
-let balls = [];
+let physicalBalls = [];
 
-const LB = [
+const LB =[
   {name:'BTC KING',   sats:96000},
   {name:'SATOSHI',    sats:48200},
   {name:'HODLR',      sats:31700},
@@ -205,7 +397,7 @@ const LB = [
 
 // ── GEOMETRY ──────────────────────────────────────────────────
 function getPegPositions() {
-  const rows = [];
+  const rows =[];
   const spacingY = (SLOT_Y - 16 - BOARD_TOP) / (ROWS - 1);
   for (let r = 0; r < ROWS; r++) {
     const y    = BOARD_TOP + r * spacingY;
@@ -218,10 +410,10 @@ function getPegPositions() {
 }
 
 function getSlotGeometry() {
-  const lastCols = ROWS + 1;   // 13 pegs in last row
+  const lastCols = ROWS + 1;
   const tw  = (lastCols - 1) * GAP;
-  const x0  = W / 2 - tw / 2 - GAP / 2;  // half-gap extension on each side
-  const sw  = (tw + GAP) / (ROWS + 1);    // 13 slots
+  const x0  = W / 2 - tw / 2 - GAP / 2;
+  const sw  = (tw + GAP) / (ROWS + 1);
   return { x0, sw };
 }
 
@@ -232,7 +424,7 @@ function initMatter() {
   runner = Runner.create();
 
   const W_OPT = { isStatic: true, friction: 0, restitution: 0.1 };
-  World.add(world, [
+  World.add(world,[
     Bodies.rectangle(W/2, -10, W,  20, W_OPT),
     Bodies.rectangle(W/2, H+10, W, 20, W_OPT),
     Bodies.rectangle(-10, H/2, 20, H,  W_OPT),
@@ -249,7 +441,7 @@ function initMatter() {
 
   Events.on(engine, 'collisionStart', ev => {
     ev.pairs.forEach(pair => {
-      const b = balls.find(b => b === pair.bodyA || b === pair.bodyB);
+      const b = physicalBalls.find(b => b === pair.bodyA || b === pair.bodyB);
       if (!b || b._landed) return;
       if (b.position.y > SLOT_Y - 24) {
         b._landed = true;
@@ -264,14 +456,23 @@ function initMatter() {
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall() {
-  if (freeDrops <= 0 && balance < currentBet) return false;
-  if (freeDrops > 0) {
-    freeDrops--;
-    document.getElementById('free-drops').textContent = freeDrops;
+  const costSats = currentBet;
+  const costBalls = currentBet / 100;
+
+  if (balls >= costBalls) {
+    balls -= costBalls;
+  } else if (balance >= costSats) {
+    balance -= costSats;
+  } else if ((balls * 100) + balance >= costSats) {
+    const remain = costSats - (balls * 100);
+    balls = 0;
+    balance -= remain;
   } else {
-    balance -= currentBet;
+    showErrorToast("Not enough Sats/Balls!");
+    stopAuto();
+    return false;
   }
-  totalDrops++;
+
   updateUI();
 
   const ball = Bodies.circle(
@@ -286,10 +487,11 @@ function spawnBall() {
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
+      _bet: currentBet
     }
   );
   Body.setVelocity(ball, { x: (Math.random() - 0.5) * 2, y: 5 });
-  balls.push(ball);
+  physicalBalls.push(ball);
   World.add(world, ball);
 
   setTimeout(() => {
@@ -305,7 +507,7 @@ function handleLanding(ball) {
   slot = Math.max(0, Math.min(MULT.length - 1, slot));
 
   const mult = MULT[slot];
-  const win  = Math.floor(currentBet * mult);
+  const win  = Math.floor(ball._bet * mult);
   balance    += win;
   sessionWon += win;
   history.unshift({ mult, win });
@@ -314,18 +516,16 @@ function handleLanding(ball) {
   updateUI();
   renderHistory();
   showToast(mult, win);
-  if (win >= currentBet * 5) triggerConfetti();
+  if (win >= ball._bet * 5) triggerConfetti();
 
   setTimeout(() => {
     World.remove(world, ball);
-    const i = balls.indexOf(ball);
-    if (i > -1) balls.splice(i, 1);
+    const i = physicalBalls.indexOf(ball);
+    if (i > -1) physicalBalls.splice(i, 1);
 
     if (autoRunning) {
       autoTimer = setTimeout(() => {
-        if (autoRunning) {
-          if (!spawnBall()) stopAuto();
-        }
+        if (autoRunning) spawnBall();
       }, 150 + Math.random() * 200);
     }
   }, 700);
@@ -365,14 +565,14 @@ function stopAuto() {
 function updatePlayBtn() {
   const btn = document.getElementById('play-btn');
   if (mode === 'manual') {
-    btn.textContent = '⚡ PLAY';
-    btn.className   = 'play-btn manual';
+    btn.innerHTML = i18n[currentLang].play;
+    btn.className = 'play-btn manual';
   } else if (autoRunning) {
-    btn.textContent = '⏹ STOP';
-    btn.className   = 'play-btn auto-running';
+    btn.innerHTML = i18n[currentLang].stop;
+    btn.className = 'play-btn auto-running';
   } else {
-    btn.textContent = '⟳ AUTO START';
-    btn.className   = 'play-btn manual';
+    btn.innerHTML = i18n[currentLang].auto_start;
+    btn.className = 'play-btn manual';
   }
 }
 
@@ -386,7 +586,8 @@ function setBet(amount, el) {
 function updateUI() {
   document.getElementById('balance').textContent    = Math.floor(balance).toLocaleString();
   document.getElementById('won').textContent        = Math.floor(sessionWon).toLocaleString();
-  document.getElementById('drop-count').textContent = totalDrops;
+  document.getElementById('drop-count').textContent = Math.floor(balls).toLocaleString();
+  document.getElementById('free-drops').textContent = Math.floor(balls).toLocaleString();
 }
 
 function showToast(mult, win) {
@@ -395,10 +596,24 @@ function showToast(mult, win) {
   const satsEl = document.getElementById('toast-sats');
   multEl.textContent = mult + 'x';
   multEl.className   = mult >= 5 ? 'toast-mult jackpot-text' : 'toast-mult';
+  multEl.style.color = '';
   satsEl.textContent = (win > 0 ? '+' : '') + win.toLocaleString() + ' SATS';
   satsEl.style.color = win < currentBet ? '#ff5f7a' : '#0affee';
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 1200);
+}
+
+function showErrorToast(msg) {
+  const toast  = document.getElementById('toast');
+  const multEl = document.getElementById('toast-mult');
+  const satsEl = document.getElementById('toast-sats');
+  multEl.textContent = "!";
+  multEl.className   = 'toast-mult';
+  multEl.style.color = '#ff2d55';
+  satsEl.textContent = msg;
+  satsEl.style.color = '#ff2d55';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
 }
 
 function renderHistory() {
@@ -428,14 +643,12 @@ function renderLoop() {
   ctx.fillStyle = '#13131f';
   ctx.fillRect(0, 0, W, H);
 
-  // grid
   ctx.strokeStyle = 'rgba(255,255,255,.018)';
   ctx.lineWidth = 1;
   for (let x = 0; x < W; x += 44) {
     ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
   }
 
-  // pegs
   getPegPositions().forEach(({x,y}) => {
     const g = ctx.createRadialGradient(x,y,0,x,y,PEG_R+4);
     g.addColorStop(0,'rgba(220,210,255,.85)');
@@ -446,7 +659,6 @@ function renderLoop() {
     ctx.beginPath(); ctx.arc(x-1.5,y-1.5,2.2,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,.7)'; ctx.fill();
   });
 
-  // slots
   const { x0, sw } = getSlotGeometry();
   for (let i = 0; i < MULT.length; i++) {
     const x   = x0 + i * sw;
@@ -472,8 +684,7 @@ function renderLoop() {
     ctx.fillText('₿', x+sw/2, SLOT_Y+33);
   }
 
-  // balls
-  balls.forEach(ball => {
+  physicalBalls.forEach(ball => {
     const {x,y} = ball.position;
     const h     = ball._hue || 30;
     const sg = ctx.createRadialGradient(x,y,0,x,y,BALL_R+8);
@@ -500,7 +711,7 @@ function triggerConfetti() {
   pc.style.display = 'block';
   pc.width  = window.innerWidth;
   pc.height = window.innerHeight;
-  const cols = ['#ff6b00','#ffc700','#0affee','#ff2d55','#4cd964','#c084fc'];
+  const cols =['#ff6b00','#ffc700','#0affee','#ff2d55','#4cd964','#c084fc'];
   const pts  = Array.from({length:100}, () => ({
     x:Math.random()*pc.width, y:Math.random()*pc.height-pc.height,
     vx:(Math.random()-.5)*7, vy:Math.random()*4+2,
@@ -522,17 +733,19 @@ function triggerConfetti() {
 
 // ── BOOT ──────────────────────────────────────────────────────
 window.onload = () => {
+  setLang('en');
   initMatter();
   updateUI();
   renderHistory();
   renderLeaderboard();
-  // demo ball
+  
+  // Dummy ball purely for visual intro (does not affect balance/balls)
   setTimeout(() => {
     const d = Bodies.circle(W/2, 18, BALL_PHYS, {
-      restitution:.4, friction:.005, frictionAir:.012, density:1, label:'ball', _landed:false, _hue:30
+      restitution:.4, friction:.005, frictionAir:.012, density:1, label:'ball', _landed:false, _hue:30, _bet: 0
     });
     Body.setVelocity(d, {x:1.2, y:5});
-    balls.push(d);
+    physicalBalls.push(d);
     World.add(world, d);
     setTimeout(()=>{if(!d._landed){d._landed=true;handleLanding(d);}}, 10000);
   }, 400);
