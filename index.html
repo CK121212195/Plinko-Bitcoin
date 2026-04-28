@@ -765,8 +765,9 @@ function initMatter() {
   ]);
 
   getPegPositions().forEach(({ x, y }) => {
+    // ⬇️ 反発係数 (restitution) を 0.05 まで下げて無駄な跳ねを防止
     const p = Bodies.circle(x, y, PEG_PHYS, {
-      isStatic: true, restitution: 0.25, friction: 0.05, label: 'peg'
+      isStatic: true, restitution: 0.05, friction: 0.05, label: 'peg'
     });
     pegs.push(p);
     World.add(world, p);
@@ -808,22 +809,24 @@ function spawnBall() {
   totalDrops++;
   updateUI();
 
+  // ⬇️ 位置ブレを狭め (1.5)、restitution (0.1) に下げ、空気抵抗 (0.035) を上げる
   const ball = Bodies.circle(
-    W / 2 + (Math.random() - 0.5) * 4,
+    W / 2 + (Math.random() - 0.5) * 1.5,
     18,
     BALL_PHYS,
     {
-      restitution: 0.25,
-      friction: 0.001,
-      frictionAir: 0.025,
-      density: 1.2,
+      restitution: 0.1,
+      friction: 0.005,
+      frictionAir: 0.035,
+      density: 1.5,
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
       _bet: actualBet
     }
   );
-  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.4, y: 1.5 });
+  // ⬇️ 初速の横ブレも極力抑える
+  Body.setVelocity(ball, { x: (Math.random() - 0.5) * 0.1, y: 1.5 });
   physicalBalls.push(ball);
   World.add(world, ball);
 
