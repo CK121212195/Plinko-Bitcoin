@@ -1,20 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PLINKO — Lightning Sats</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VKFRN800K7"></script>
+  <script>
+    window.dataLayer = window.dataLayer ||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VKFRN800K7');
+  </script>
+
+  <!-- OGP & Favicon -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ck121212195.github.io/plinko/">
+  <meta property="og:site_name" content="PLINKO — Lightning Sats">
+  <meta property="og:title" content="PLINKO — カワイイ！楽しい！Satsを稼ごう💖">
+  <meta property="og:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで楽しく遊ぼう✨ #LightningNetwork">
+  <meta property="og:image" content="https://ck121212195.github.io/LNbits_slot2/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PLINKO — カワイイ！楽しい！Satsを稼ごう💖">
+  <meta name="twitter:description" content="ボールを落としてマルチプライヤーを狙え！ライトニングネットワークで楽しく遊ぼう✨ #LightningNetwork">
+  <meta name="twitter:image" content="https://ck121212195.github.io/LNbits_slot2/og-image.png">
+
+  <link rel="icon" type="image/png" href="https://ck121212195.github.io/LNbits_slot2/favicon.png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://ck121212195.github.io/LNbits_slot2/favicon.png">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       --bg-deep:#0c0c14; --bg-mid:#13131f; --bg-card:#1a1a2e;
       --orange:#ff6b00; --yellow:#ffc700; --red:#ff2d55; --cyan:#0affee; --green:#4cd964;
+      --pink:#FF6EB4; --purple:#C084FC;
       --text:#f0f0f8; --muted:#6e6e8a;
     }
     *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     body{background:var(--bg-deep);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
-    .header{width:100%;max-width:480px;padding:16px 20px 10px;display:flex;align-items:center;justify-content:space-between}
+    
+    .header{width:100%;max-width:480px;padding:16px 20px 10px;display:flex;align-items:center;justify-content:space-between; position:relative; z-index:2;}
     .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:22px;letter-spacing:4px}
     .logo span{color:var(--orange)}
     .logo-sub{font-size:9px;font-weight:700;letter-spacing:3px;color:var(--yellow);display:block;margin-top:-1px}
@@ -22,15 +50,14 @@
     .ln-dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 1.2s infinite}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
     
-    /* Top Actions (Wallet, Share, Lang) */
-    .top-actions { width: 100%; max-width: 480px; padding: 0 16px 12px; display: flex; gap: 8px; justify-content: center; align-items: center; }
+    .top-actions { width: 100%; max-width: 480px; padding: 0 16px 12px; display: flex; gap: 8px; justify-content: center; align-items: center; position:relative; z-index:2;}
     .action-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family:'Orbitron',monospace; transition: 0.2s;}
     .action-btn:hover { background: rgba(255,255,255,.1); border-color: var(--cyan); color: var(--cyan); }
     .lang-selector { display: flex; gap: 4px; margin-left: auto; }
     .lang-btn { background: transparent; border: 1px solid var(--muted); color: var(--muted); border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; font-family:'Orbitron',monospace; transition: 0.2s; }
     .lang-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(10,255,238,0.1); }
 
-    .stats-row{width:100%;max-width:480px;padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .stats-row{width:100%;max-width:480px;padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px; position:relative; z-index:2;}
     .stat-card{background:var(--bg-card);border-radius:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
     .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
     .stat-card.balance::before{background:var(--cyan)}
@@ -41,11 +68,13 @@
     .stat-card.balance .stat-value{color:var(--cyan)}
     .stat-card.won .stat-value{color:var(--yellow)}
     .stat-card.drops .stat-value{color:var(--orange)}
-    .bonus-banner{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:linear-gradient(135deg,#f7931a18,#ffb84d0a);border:1px solid #f7931a44;border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+    
+    .bonus-banner{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:linear-gradient(135deg,#f7931a18,#ffb84d0a);border:1px solid #f7931a44;border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between; position:relative; z-index:2;}
     .bonus-left{font-size:12px;font-weight:700;letter-spacing:1px;color:#f7931a;text-transform:uppercase}
     .bonus-sub{font-size:11px;color:var(--muted)}
     .bonus-count{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--yellow);line-height:1}
-    .game-wrapper{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:var(--bg-mid);border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;position:relative}
+    
+    .game-wrapper{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;background:var(--bg-mid);border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;position:relative; z-index:1;}
     canvas{display:block;width:100%;height:auto}
     
     .toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(12,12,20,.95);border-radius:14px;padding:16px 28px;text-align:center;border:2px solid var(--orange);pointer-events:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1);z-index:10}
@@ -53,7 +82,7 @@
     .toast-mult{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--yellow)}
     .toast-sats{font-size:16px;font-weight:700;color:var(--cyan);margin-top:4px}
     
-    .controls{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px}
+    .controls{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px; position:relative; z-index:2;}
     .mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
     .mode-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 10px;color:var(--text);font-family:'Orbitron',monospace;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
     .mode-btn .sub{display:block;font-family:'Rajdhani',sans-serif;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-top:2px}
@@ -74,7 +103,7 @@
     .play-btn:hover{transform:translateY(-2px)}
     .play-btn:active{transform:translateY(1px)}
     
-    .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .bottom-section{width:calc(100% - 32px);max-width:448px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px; position:relative; z-index:2;}
     .panel{background:var(--bg-card);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
     .panel-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
     .panel-title::before{content:'';display:inline-block;width:3px;height:12px;border-radius:2px}
@@ -89,15 +118,14 @@
     .hist-sats{font-weight:600;font-size:12px;color:var(--muted)}
     .lb-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
     .lb-item:last-child{border-bottom:none}
-    .lb-rank{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;width:20px;color:var(--muted)}
+    .lb-rank{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;width:20px;color:var(--muted); text-align:center;}
     .lb-rank.gold{color:var(--yellow)}
     .lb-rank.silver{color:#c0c0c0}
     .lb-rank.bronze{color:#cd7f32}
     .lb-name{flex:1;font-weight:600;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .lb-sats{font-family:'Orbitron',monospace;font-size:10px;color:var(--yellow);font-weight:700}
     
-    /* Other Games Section */
-    .more-games { width: calc(100% - 32px); max-width: 448px; margin: 20px auto 10px; }
+    .more-games { width: calc(100% - 32px); max-width: 448px; margin: 20px auto 10px; position:relative; z-index:2;}
     .mg-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; text-align: center; letter-spacing: 2px; }
     .mg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .mg-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 8px; text-align: center; text-decoration: none; transition: all 0.2s; }
@@ -106,22 +134,30 @@
     .mg-name { font-size: 11px; font-weight: 700; color: var(--text); font-family: 'Orbitron', monospace; }
 
     /* Modals */
-    .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(12,12,20,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .modal.show { opacity: 1; pointer-events: auto; }
-    .modal-content { background: var(--bg-card); border: 1px solid rgba(255,107,0,0.5); border-radius: 16px; padding: 24px; width: 90%; max-width: 360px; text-align: center; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(12,12,20,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;}
+    .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+    .modal-content { background: var(--bg-card); border: 1px solid rgba(255,107,0,0.5); border-radius: 16px; padding: 24px; width: 100%; max-width: 360px; text-align: center; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     .close-btn { position: absolute; top: 12px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
-    .modal h2 { font-family: 'Orbitron', monospace; color: var(--yellow); margin-bottom: 16px; }
-    .modal p { color: var(--text); font-size: 15px; margin-bottom: 24px; line-height: 1.6; text-align: left; display: inline-block; }
-    .modal-btn { background: linear-gradient(135deg,#ff6b00,#ff2d55); border: none; border-radius: 8px; color: #fff; padding: 14px 24px; font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
+    .modal-content h2 { font-family: 'Orbitron', monospace; color: var(--yellow); margin-bottom: 16px; letter-spacing: 2px; }
+    .modal-content p { color: var(--text); font-size: 13px; margin-bottom: 24px; line-height: 1.6; text-align: left; display: inline-block; }
+    .modal-btn { background: linear-gradient(135deg,#ff6b00,#ff2d55); border: none; border-radius: 8px; color: #fff; padding: 14px 24px; font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; letter-spacing: 2px;}
     .modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(255,107,0,0.4); }
     
+    /* Invoice Modal Styles */
+    .modal-qr img { width: 200px; height: 200px; border: 3px solid var(--orange); border-radius: 10px; margin: 0 auto 10px; display: block; }
+    .modal-inv { width: 100%; padding: 10px; background: var(--bg-mid); color: var(--cyan); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-family: 'Orbitron', monospace; font-size: 10px; margin-bottom: 10px; resize: none; word-break: break-all; height: 50px; cursor: pointer; }
+    .modal-waiting { font-size: 11px; color: var(--yellow); animation: blink 1.2s infinite; margin: 6px 0 16px; font-weight: 600; }
+    .btn-modal-close { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--muted); font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s; }
+    .btn-modal-close:hover { border-color: var(--orange); color: var(--text); }
+    
     .wallet-section h3 { color: var(--muted); font-size: 12px; margin-bottom: 10px; letter-spacing: 1px; }
-    .wallet-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text); padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 8px; cursor: pointer; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 14px; transition: all 0.2s; }
-    .wallet-btn:hover { background: rgba(255,107,0,0.2); border-color: var(--orange); color: var(--yellow); }
-    .wallet-btn.withdraw { background: rgba(10,255,238,0.1); border-color: var(--cyan); color: var(--cyan); margin-top: 10px; }
-    .wallet-btn.withdraw:hover { background: rgba(10,255,238,0.2); }
+    .dep-opts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .btn-dep { padding: 12px 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--text); font-family: 'Orbitron', monospace; font-size: 11px; cursor: pointer; transition: all .15s; text-align: center; }
+    .btn-dep:hover { border-color: var(--orange); color: var(--yellow); box-shadow: 0 0 12px rgba(255,107,0,0.2); }
+    .btn-dep span { display: block; font-size: 9px; color: var(--muted); margin-top: 2px; }
 
-    .credits { text-align:center; margin: 10px 0 30px; display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'Orbitron', monospace; }
+    .credits { text-align:center; margin: 10px 0 30px; display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'Orbitron', monospace; position:relative; z-index:2;}
     
     @keyframes jackpot{0%,100%{color:var(--yellow)}33%{color:#ff2d55}66%{color:var(--cyan)}}
     .jackpot-text{animation:jackpot .35s infinite}
@@ -147,17 +183,17 @@
 </div>
 
 <div class="stats-row">
-  <div class="stat-card balance"><div class="stat-label" data-i18n="balance">Balance</div><div class="stat-value" id="balance">0</div></div>
+  <div class="stat-card balance"><div class="stat-label" data-i18n="balance">Balance</div><div class="stat-value" id="balance">30,000</div></div>
   <div class="stat-card won"><div class="stat-label" data-i18n="won">Won</div><div class="stat-value" id="won">0</div></div>
-  <div class="stat-card drops"><div class="stat-label" data-i18n="balls">Balls</div><div class="stat-value" id="drop-count">20</div></div>
+  <div class="stat-card drops"><div class="stat-label" data-i18n="drops">Drops</div><div class="stat-value" id="drop-count">0</div></div>
 </div>
 
 <div class="bonus-banner">
   <div>
     <div class="bonus-left" data-i18n="bonus_title">⚡ Welcome Bonus</div>
-    <div class="bonus-sub" data-i18n="bonus_sub">Free balls included</div>
+    <div class="bonus-sub" data-i18n="bonus_sub">Free drops included</div>
   </div>
-  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub" data-i18n="balls">BALLS</div></div>
+  <div style="text-align:right"><div class="bonus-count" id="free-drops">20</div><div class="bonus-sub" data-i18n="free">FREE</div></div>
 </div>
 
 <div class="game-wrapper">
@@ -228,86 +264,107 @@
 </div>
 
 <!-- How To Play Modal -->
-<div id="how-to-modal" class="modal show">
+<div id="how-to-modal" class="modal-overlay show">
   <div class="modal-content">
     <h2 data-i18n="how_to_title">HOW TO PLAY</h2>
     <p data-i18n="how_to_desc">
-      1. Select your bet.<br>
-      2. Drop the ball.<br>
-      3. Win sats based on the multiplier!
+      1. Select your bet amount.<br>
+      2. Drop the ball & hit high multipliers.<br>
+      3. Start with 30,000 SATS + 20 FREE Drops!<br>
+      4. Deposit via Lightning to keep playing.
     </p>
     <button class="modal-btn" onclick="startGame()" data-i18n="start_game">START GAME</button>
   </div>
 </div>
 
 <!-- Wallet Modal -->
-<div id="wallet-modal" class="modal">
+<div id="wallet-modal" class="modal-overlay">
   <div class="modal-content">
     <button class="close-btn" onclick="closeWallet()">×</button>
     <h2 data-i18n="wallet">WALLET</h2>
-    
     <div class="wallet-section">
-      <h3 data-i18n="deposit">DEPOSIT</h3>
-      <button class="wallet-btn" onclick="buyBalls(1000, 20)">1000 sats ➔ 20 Balls</button>
-      <button class="wallet-btn" onclick="buyBalls(5000, 120)">5000 sats ➔ 120 Balls</button>
-      <button class="wallet-btn" onclick="buyBalls(10000, 500)">10000 sats ➔ 500 Balls</button>
-    </div>
-
-    <div class="wallet-section" style="margin-top:20px">
-      <h3 data-i18n="withdraw">WITHDRAW</h3>
-      <button class="wallet-btn withdraw" onclick="withdrawSats()">Withdraw All Sats</button>
+      <h3 data-i18n="deposit_desc">⚡ DEPOSIT SATS TO PLAY</h3>
+      <div class="dep-opts">
+        <button class="btn-dep" onclick="openDeposit(1000)">1,000<span>SATS</span></button>
+        <button class="btn-dep" onclick="openDeposit(5000)">5,000<span>SATS</span></button>
+        <button class="btn-dep" onclick="openDeposit(10000)">10,000<span>SATS</span></button>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Invoice Modal -->
+<div id="modal-invoice" class="modal-overlay">
+  <div class="modal-content">
+    <h2 data-i18n="modal_title">⚡ PAY TO DEPOSIT</h2>
+    <div class="modal-qr"><a id="ln-link" href="#"><img id="qr-img" src="" alt="QR"></a></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px" data-i18n="tap_qr">Tap QR to open wallet</div>
+    <textarea class="modal-inv" id="modal-inv-text" readonly onclick="this.select()"></textarea>
+    <div class="modal-waiting" data-i18n="modal_waiting">⏳ Waiting for payment...</div>
+    <button class="modal-btn" style="width:100%; margin-bottom:10px; font-size:12px; padding: 12px;" onclick="verifyPayment()" data-i18n="verify">VERIFY PAYMENT</button>
+    <button class="btn-modal-close" onclick="closeInvoiceModal()" data-i18n="btn_cancel">CANCEL</button>
+  </div>
+</div>
+
 <script>
+// ── CONFIG & API ──────────────────────────────────────────────
+const LNBITS_API_KEY = "67e5b0ad270f44d19e6d768bb3314e49";
+const LNBITS_URL     = "https://demo.lnbits.com/api/v1/payments";
+const GAS_URL        = "https://script.google.com/macros/s/AKfycbw2zH2M6fE9_iNc8qk9NSTWdSb5Wt5a6qj8kLxxDNnMd9X6E-ZTahlRRgwSUqRMKSAvXw/exec";
+
 // ── i18n Dictionary ───────────────────────────────────────────
 const i18n = {
   en: {
-    balance: "Balance", won: "Won", balls: "Balls",
-    bonus_title: "⚡ Welcome Bonus", bonus_sub: "Free balls included",
+    balance: "Balance", won: "Won", drops: "Drops", free: "FREE",
+    bonus_title: "⚡ Welcome Bonus", bonus_sub: "Free drops included",
     manual: "▶ MANUAL<span class=\"sub\">1 DROP / TAP</span>",
     auto: "⟳ AUTO<span class=\"sub\">CONTINUOUS</span>",
     bet_label: "Bet per Drop (sats)",
     play: "⚡ PLAY", stop: "⏹ STOP", auto_start: "⟳ AUTO START",
     recent: "Recent", top_wins: "Top Wins",
     how_to_title: "HOW TO PLAY",
-    how_to_desc: "1. Select your bet.<br>2. Drop the ball.<br>3. Win sats based on the multiplier!",
+    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 30,000 SATS + 20 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
     start_game: "START GAME",
-    wallet: "WALLET", deposit: "DEPOSIT", withdraw: "WITHDRAW",
+    wallet: "WALLET", deposit_desc: "⚡ DEPOSIT SATS TO PLAY",
+    modal_title: "⚡ PAY TO DEPOSIT", tap_qr: "Tap QR to open wallet",
+    modal_waiting: "⏳ Waiting for payment...", btn_cancel: "CANCEL", verify: "VERIFY PAYMENT",
     other_games: "OTHER GAMES", share: "SHARE"
   },
   ja: {
-    balance: "残高", won: "獲得", balls: "ボール",
-    bonus_title: "⚡ ウェルカムボーナス", bonus_sub: "無料ボールプレゼント",
+    balance: "残高", won: "獲得", drops: "落下数", free: "無料",
+    bonus_title: "⚡ ウェルカムボーナス", bonus_sub: "無料ドロップ付き",
     manual: "▶ 手動<span class=\"sub\">1タップ1球</span>",
     auto: "⟳ オート<span class=\"sub\">連続プレイ</span>",
     bet_label: "1球あたりの賭け額 (sats)",
     play: "⚡ プレイ", stop: "⏹ 停止", auto_start: "⟳ オート開始",
     recent: "最近の履歴", top_wins: "トップ勝利",
     how_to_title: "遊び方",
-    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落とします。<br>3. 倍率に応じてSatsを獲得！",
+    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回30,000 SATS ＋ 20回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
     start_game: "ゲーム開始",
-    wallet: "ウォレット", deposit: "入金", withdraw: "出金",
+    wallet: "ウォレット", deposit_desc: "⚡ 遊ぶためのSATSを入金",
+    modal_title: "⚡ 入金するには支払いを", tap_qr: "QRタップでウォレットを開く",
+    modal_waiting: "⏳ 支払いを確認中...", btn_cancel: "キャンセル", verify: "支払いを確認",
     other_games: "他のゲーム", share: "シェア"
   },
   ko: {
-    balance: "잔액", won: "획득", balls: "볼",
-    bonus_title: "⚡ 웰컴 보너스", bonus_sub: "무료 볼 포함",
+    balance: "잔액", won: "획득", drops: "드롭", free: "무료",
+    bonus_title: "⚡ 웰컴 보너스", bonus_sub: "무료 드롭 포함",
     manual: "▶ 수동<span class=\"sub\">1탭 1구</span>",
     auto: "⟳ 자동<span class=\"sub\">연속 플레이</span>",
     bet_label: "1구당 배팅액 (sats)",
     play: "⚡ 플레이", stop: "⏹ 정지", auto_start: "⟳ 자동 시작",
     recent: "최근 기록", top_wins: "최고 승리",
     how_to_title: "게임 방법",
-    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨리세요.<br>3. 배수에 따라 Sats를 획득하세요!",
+    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 30,000 SATS + 20회 무료 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
     start_game: "게임 시작",
-    wallet: "지갑", deposit: "입금", withdraw: "출금",
+    wallet: "지갑", deposit_desc: "⚡ 플레이할 SATS 입금",
+    modal_title: "⚡ 입금 결제", tap_qr: "QR 탭하여 지갑 열기",
+    modal_waiting: "⏳ 결제 대기 중...", btn_cancel: "취소", verify: "결제 확인",
     other_games: "다른 게임", share: "공유"
   }
 };
 
-let currentLang = 'en';
+let currentLang = 'ja'; // デフォルト日本語
 
 function setLang(lang) {
   currentLang = lang;
@@ -322,35 +379,133 @@ function setLang(lang) {
 }
 
 // ── Modals & Social ───────────────────────────────────────────
+let engineStarted = false;
+
 function startGame() {
   document.getElementById('how-to-modal').classList.remove('show');
+  if (!engineStarted) {
+    Runner.run(runner, engine);
+    requestAnimationFrame(renderLoop);
+    engineStarted = true;
+  }
 }
 
 function openWallet() { document.getElementById('wallet-modal').classList.add('show'); }
 function closeWallet() { document.getElementById('wallet-modal').classList.remove('show'); }
 
-function buyBalls(sats, amount) {
-  alert(`[Mock] Invoice Paid: ${sats} sats.\nAdded ${amount} Balls!`);
-  balls += amount;
-  updateUI();
+// ── LNbits Deposit Logic ──────────────────────────────────────
+let pendingDepositAmount = 0;
+let curHash = "";
+let pollTimer = null;
+
+function openDeposit(amount) {
+  if (autoRunning) stopAuto();
   closeWallet();
+  pendingDepositAmount = amount;
+  
+  const invModal = document.getElementById('modal-invoice');
+  invModal.classList.add('show');
+  document.getElementById('qr-img').src = '';
+  document.getElementById('modal-inv-text').value = 'Generating invoice...';
+
+  fetch(LNBITS_URL, {
+    method: 'POST',
+    headers: { 'X-Api-Key': LNBITS_API_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ out: false, amount: amount, memo: `⚡ PLINKO Lightning Sats — ${amount} sats deposit` })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Network response was not ok");
+    return res.json();
+  })
+  .then(data => {
+    curHash = data.payment_hash;
+    const inv = data.payment_request;
+    const lnUrl = `lightning:${inv}`;
+    
+    document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${lnUrl}`;
+    document.getElementById('ln-link').href = lnUrl;
+    document.getElementById('modal-inv-text').value = inv;
+    
+    startPolling();
+  })
+  .catch(err => {
+    alert("Invoice generation failed. API server might be down.");
+    closeInvoiceModal();
+  });
 }
 
-function withdrawSats() {
-  if(balance <= 0) return alert('No sats to withdraw!');
-  alert(`[Mock] Withdraw Success!\n${balance} sats sent to your wallet.`);
-  balance = 0;
-  updateUI();
-  closeWallet();
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(() => {
+    fetch(`${LNBITS_URL}/${curHash}`, { method: "GET", headers: { 'X-Api-Key': LNBITS_API_KEY } })
+    .then(r => r.json())
+    .then(data => {
+      if (data.paid) {
+        clearInterval(pollTimer);
+        handleDepositSuccess();
+      }
+    }).catch(console.error);
+  }, 3000);
 }
 
+function verifyPayment() {
+  if (!curHash) return;
+  fetch(`${LNBITS_URL}/${curHash}`, { method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY } })
+  .then(res => res.json())
+  .then(data => {
+    if (data.paid) {
+      if (pollTimer) clearInterval(pollTimer);
+      handleDepositSuccess();
+    } else {
+      alert("Payment not received yet. Keep waiting!");
+    }
+  }).catch(console.error);
+}
+
+function handleDepositSuccess() {
+  closeInvoiceModal();
+  balance += pendingDepositAmount;
+  updateUI();
+  showToast(1, pendingDepositAmount, true); // Deposit用の特殊トースト
+}
+
+function closeInvoiceModal() {
+  if (pollTimer) clearInterval(pollTimer);
+  document.getElementById('modal-invoice').classList.remove('show');
+}
+
+// ── Share to X (おしゃれな文言) ──────────────────────────────
 function shareOnX() {
-  const text = `I just won ${sessionWon} sats on PLINKO Lightning Sats! ⚡️🪙\nPlay now and stack sats!`;
-  const url = window.location.href;
+  const isJackpot = history.length > 0 && history[0].mult >= 8;
+  let text = "";
+  let lastWin = history.length > 0 ? history[0].win : 0;
+  
+  if (currentLang === 'ja') {
+    if (isJackpot) {
+      text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
+    } else {
+      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回30,000 SATS＋無料20プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
+    }
+  } else if (currentLang === 'ko') {
+    if (isJackpot) {
+      text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
+    } else {
+      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 30,000 SATS + 무료 20회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
+    }
+  } else {
+    if (isJackpot) {
+      text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork`;
+    } else {
+      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 30,000 SATS + 20 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
+    }
+  }
+
+  const url = window.location.href.split('?')[0];
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
   window.open(shareUrl, '_blank');
 }
 
+// ── Matter.js Physics ─────────────────────────────────────────
 const { Engine, World, Bodies, Body, Events, Runner } = Matter;
 
 const gameCanvas = document.getElementById('canvas');
@@ -358,7 +513,6 @@ const ctx = gameCanvas.getContext('2d');
 const W = gameCanvas.width;
 const H = gameCanvas.height;
 
-// ── LAYOUT CONSTANTS ──────────────────────────────────────────
 const ROWS      = 12;
 const PEG_R     = 5;
 const PEG_PHYS  = 4;
@@ -369,14 +523,14 @@ const BOARD_TOP = 55;
 const SLOT_H    = 48;
 const SLOT_Y    = H - SLOT_H - 6;
 
-// ── HOUSE EDGE TABLE ─────────────────────────────────────────
 const MULT     =[0.2, 0.2, 0.3, 0.5, 1.0, 2.0, 8.0, 2.0, 1.0, 0.5, 0.3, 0.2, 0.2];
 const SLOT_COL =['#ff2d55','#ff2d55','#ff5522','#ff6b00','#ff9900','#4cd964','#0affee','#4cd964','#ff9900','#ff6b00','#ff5522','#ff2d55','#ff2d55'];
 
 // ── STATE ──────────────────────────────────────────────────────
-let balance    = 0;
+let balance    = 30000;
 let sessionWon = 0;
-let balls      = 20; // 1 ball = 100 sats value
+let totalDrops = 0;
+let freeDrops  = 20; 
 let currentBet = 100;
 let mode       = 'manual';
 let autoRunning= false;
@@ -385,15 +539,7 @@ let history    =[];
 
 let engine, runner, world;
 let pegs  = [];
-let physicalBalls = [];
-
-const LB =[
-  {name:'BTC KING',   sats:96000},
-  {name:'SATOSHI',    sats:48200},
-  {name:'HODLR',      sats:31700},
-  {name:'LN GOD',     sats:19400},
-  {name:'PLINKO ACE', sats:12100},
-];
+let physicalBalls =[];
 
 // ── GEOMETRY ──────────────────────────────────────────────────
 function getPegPositions() {
@@ -450,29 +596,25 @@ function initMatter() {
     });
   });
 
-  Runner.run(runner, engine);
-  requestAnimationFrame(renderLoop);
+  // 初期化時はまだ Runner を起動しない (How To Play 用)
 }
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall() {
-  const costSats = currentBet;
-  const costBalls = currentBet / 100;
-
-  if (balls >= costBalls) {
-    balls -= costBalls;
-  } else if (balance >= costSats) {
-    balance -= costSats;
-  } else if ((balls * 100) + balance >= costSats) {
-    const remain = costSats - (balls * 100);
-    balls = 0;
-    balance -= remain;
-  } else {
-    showErrorToast("Not enough Sats/Balls!");
+  if (freeDrops <= 0 && balance < currentBet) {
+    showErrorToast("NOT ENOUGH SATS!");
     stopAuto();
+    openWallet();
     return false;
   }
-
+  
+  if (freeDrops > 0) {
+    freeDrops--;
+    document.getElementById('free-drops').textContent = freeDrops;
+  } else {
+    balance -= currentBet;
+  }
+  totalDrops++;
   updateUI();
 
   const ball = Bodies.circle(
@@ -586,21 +728,30 @@ function setBet(amount, el) {
 function updateUI() {
   document.getElementById('balance').textContent    = Math.floor(balance).toLocaleString();
   document.getElementById('won').textContent        = Math.floor(sessionWon).toLocaleString();
-  document.getElementById('drop-count').textContent = Math.floor(balls).toLocaleString();
-  document.getElementById('free-drops').textContent = Math.floor(balls).toLocaleString();
+  document.getElementById('drop-count').textContent = totalDrops.toLocaleString();
 }
 
-function showToast(mult, win) {
+function showToast(mult, win, isDeposit = false) {
   const toast  = document.getElementById('toast');
   const multEl = document.getElementById('toast-mult');
   const satsEl = document.getElementById('toast-sats');
-  multEl.textContent = mult + 'x';
-  multEl.className   = mult >= 5 ? 'toast-mult jackpot-text' : 'toast-mult';
+  
+  if (isDeposit) {
+    multEl.textContent = '⚡ DEPOSIT';
+    multEl.className   = 'toast-mult jackpot-text';
+    multEl.style.fontSize = '20px';
+  } else {
+    multEl.textContent = mult + 'x';
+    multEl.className   = mult >= 5 ? 'toast-mult jackpot-text' : 'toast-mult';
+    multEl.style.fontSize = '32px';
+  }
+  
   multEl.style.color = '';
-  satsEl.textContent = (win > 0 ? '+' : '') + win.toLocaleString() + ' SATS';
-  satsEl.style.color = win < currentBet ? '#ff5f7a' : '#0affee';
+  satsEl.textContent = '+' + win.toLocaleString() + ' SATS';
+  satsEl.style.color = (!isDeposit && win < currentBet) ? '#ff5f7a' : '#0affee';
+  
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 1200);
+  setTimeout(() => toast.classList.remove('show'), 1500);
 }
 
 function showErrorToast(msg) {
@@ -610,6 +761,7 @@ function showErrorToast(msg) {
   multEl.textContent = "!";
   multEl.className   = 'toast-mult';
   multEl.style.color = '#ff2d55';
+  multEl.style.fontSize = '32px';
   satsEl.textContent = msg;
   satsEl.style.color = '#ff2d55';
   toast.classList.add('show');
@@ -621,24 +773,43 @@ function renderHistory() {
     const cls = h.mult >= 5 ? 'big' : h.mult >= 1 ? 'mid' : 'low';
     return `<div class="history-item">
       <span class="hist-mult ${cls}">${h.mult}x</span>
-      <span class="hist-sats">${h.win >= 0?'+':''}${h.win.toLocaleString()}</span>
+      <span class="hist-sats">+${h.win.toLocaleString()}</span>
     </div>`;
   }).join('');
 }
 
-function renderLeaderboard() {
-  const ranks = ['gold','silver','bronze','',''];
-  document.getElementById('leaderboard').innerHTML = LB.map((e,i) =>
-    `<div class="lb-item">
-      <span class="lb-rank ${ranks[i]}">${i+1}</span>
-      <span class="lb-name">${e.name}</span>
-      <span class="lb-sats">${(e.sats/1000).toFixed(1)}K</span>
-    </div>`
-  ).join('');
+// GAS連携: リーダーボード取得
+function fetchLeaderboard() {
+  const el = document.getElementById('leaderboard');
+  el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px 0">Loading...</div>';
+  fetch(`${GAS_URL}?action=getStats`)
+  .then(r => r.json())
+  .then(data => {
+    const board = data.leaderboard ||[];
+    if (!board.length) {
+      el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px 0">No data</div>';
+      return;
+    }
+    const top5 = board.slice(0, 5);
+    const ranks =['gold','silver','bronze','',''];
+    const rankNum = ['1','2','3','4','5'];
+    el.innerHTML = top5.map((e,i) =>
+      `<div class="lb-item">
+        <span class="lb-rank ${ranks[i]}">${rankNum[i]}</span>
+        <span class="lb-name">${String(e.name).replace(/[&<>"']/g, '')}</span>
+        <span class="lb-sats">${(e.sats/1000).toFixed(1)}K</span>
+      </div>`
+    ).join('');
+  })
+  .catch(() => {
+    el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px 0">Failed to load</div>';
+  });
 }
 
 // ── RENDER ────────────────────────────────────────────────────
 function renderLoop() {
+  if (!engineStarted) return; // 始動前は描画しない
+  
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#13131f';
   ctx.fillRect(0, 0, W, H);
@@ -733,22 +904,18 @@ function triggerConfetti() {
 
 // ── BOOT ──────────────────────────────────────────────────────
 window.onload = () => {
-  setLang('en');
+  const userLang = (navigator.language || navigator.userLanguage).substring(0, 2);
+  const defaultLang = ['ja', 'ko'].includes(userLang) ? userLang : 'en';
+  setLang(defaultLang);
+  
   initMatter();
   updateUI();
   renderHistory();
-  renderLeaderboard();
+  fetchLeaderboard();
   
-  // Dummy ball purely for visual intro (does not affect balance/balls)
-  setTimeout(() => {
-    const d = Bodies.circle(W/2, 18, BALL_PHYS, {
-      restitution:.4, friction:.005, frictionAir:.012, density:1, label:'ball', _landed:false, _hue:30, _bet: 0
-    });
-    Body.setVelocity(d, {x:1.2, y:5});
-    physicalBalls.push(d);
-    World.add(world, d);
-    setTimeout(()=>{if(!d._landed){d._landed=true;handleLanding(d);}}, 10000);
-  }, 400);
+  // 初期状態では Canvas の背景だけ描いておく
+  ctx.fillStyle = '#13131f';
+  ctx.fillRect(0, 0, W, H);
 };
 </script>
 </body>
