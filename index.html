@@ -579,7 +579,6 @@ function shareGameOverOnX() {
 
 // ── Game Over & Leaderboard Logic ─────────────────────────────
 function checkGameOver() {
-  // 最低ベット額(100sats)未満で、盤面にボールがなく、無料ドロップもなければゲームオーバー
   if (balance < 100 && physicalBalls.length === 0 && freeDrops <= 0) {
     if (autoRunning) stopAuto();
     showGameOverOverlay();
@@ -659,7 +658,6 @@ function closeGameOverAndDeposit() {
   openWallet();
 }
 
-// GAS連携: リーダーボード取得
 function fetchLeaderboard() {
   const el = document.getElementById('leaderboard');
   el.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px 0">⏳ Loading...</div>';
@@ -712,7 +710,6 @@ const SLOT_H    = 48;
 const SLOT_Y    = H - SLOT_H - 6;
 
 // ── HOUSE EDGE TABLE ─────────────────────────────────────────
-// 二項分布 P=[1,12,66,220,495,792,924,792,495,220,66,12,1]/4096 ≒ EV=0.948 (ハウスエッジ約5.2%)
 const MULT     =[15,  6.0, 3.0, 1.5, 1.0, 0.7, 0.6, 0.7, 1.0, 1.5, 3.0, 6.0, 15];
 const SLOT_COL =['#0affee','#4cd964','#ffaa00','#ff7700','#ff9944','#ff5533','#ff2d55','#ff5533','#ff9944','#ff7700','#ffaa00','#4cd964','#0affee'];
 
@@ -842,15 +839,13 @@ function spawnBall(xOffset = 0) {
   
   let actualBet = currentBet; // 実際に賭ける額
   
-  // ▼▼▼ ここを修正 ▼▼▼
   if (freeDrops > 0) {
     freeDrops--;
-    actualBet = 100; // 【修正】無料ドロップ中は、どんなベットを選んでいても強制的に「100sats賭け」にする
+    actualBet = 100; // 無料ドロップ中は強制的に「100sats賭け」にする
   } else {
     balance -= currentBet;
     actualBet = currentBet;
   }
-  // ▲▲▲ ここまで ▲▲▲
   
   totalDrops++;
   updateUI();
@@ -871,7 +866,7 @@ function spawnBall(xOffset = 0) {
       label: 'ball',
       _landed: false,
       _hue: 20 + Math.random() * 40,
-      _bet: currentBet, // 現在のベット額を保持
+      _bet: actualBet, // ★ココを修正！実際の賭け額(actualBet)をボールに持たせる
       _targetX: targetX,
       _targetSlot: targetSlot
     }
@@ -881,7 +876,6 @@ function spawnBall(xOffset = 0) {
   physicalBalls.push(ball);
   World.add(world, ball);
 
-  // 【元の設定に復元】フェイルセーフの時間を10000ms（10秒）に戻しました
   setTimeout(() => {
     if (!ball._landed) { ball._landed = true; handleLanding(ball); }
   }, 10000);
@@ -912,7 +906,6 @@ function handleLanding(ball) {
   showToast(mult, win);
   if (win >= ball._bet * 5) triggerConfetti();
 
-  // 【元の設定に復元】着地後の余韻の待ち時間を700ms（0.7秒）に戻しました
   setTimeout(() => {
     World.remove(world, ball);
     const i = physicalBalls.indexOf(ball);
@@ -924,7 +917,6 @@ function handleLanding(ball) {
       }, 180);
     }
     
-    // ここでも着地後に残高チェックを行う
     checkGameOver();
   }, 700);
 }
