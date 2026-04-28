@@ -830,26 +830,27 @@ function chooseLandingSlot() {
 
 // ── SPAWN BALL ────────────────────────────────────────────────
 function spawnBall(xOffset = 0) {
-  // 無料ドロップがなく、残高が現在の選択しているベット額(currentBet)に満たない場合
   if (freeDrops <= 0 && balance < currentBet) {
     if (autoRunning) stopAuto();
-    
-    // さらに、最低ベット額である「100sats」すら持っていない場合は、完全にゲームオーバー
     if (balance < 100 && physicalBalls.length === 0) {
       showGameOverOverlay();
     } else if (balance >= 100) {
-      // 100sats以上はあるが、選択中のベット額には足りない場合
       alert(i18n[currentLang].insufficient);
     }
     return false;
   }
   
-  // 残高からベット額を引く（端数オールインは廃止しました）
+  let actualBet = currentBet; // 実際に賭ける額
+  
+  // ▼▼▼ ここを修正 ▼▼▼
   if (freeDrops > 0) {
     freeDrops--;
+    actualBet = 100; // 【修正】無料ドロップ中は、どんなベットを選んでいても強制的に「100sats賭け」にする
   } else {
     balance -= currentBet;
+    actualBet = currentBet;
   }
+  // ▲▲▲ ここまで ▲▲▲
   
   totalDrops++;
   updateUI();
