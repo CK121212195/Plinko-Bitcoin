@@ -202,7 +202,7 @@
     <div class="bonus-left" data-i18n="bonus_title">⚡ Welcome Bonus</div>
     <div class="bonus-sub" data-i18n="bonus_sub">Free drops included</div>
   </div>
-  <div style="text-align:right"><div class="bonus-count" id="free-drops">10</div><div class="bonus-sub" data-i18n="free">FREE</div></div>
+  <div style="text-align:right"><div class="bonus-count" id="free-drops">3</div><div class="bonus-sub" data-i18n="free">FREE</div></div>
 </div>
 
 <div class="game-wrapper">
@@ -283,7 +283,7 @@
     <p data-i18n="how_to_desc">
       1. Select your bet amount.<br>
       2. Drop the ball & hit high multipliers.<br>
-      3. Start with 10 FREE Drops!<br>
+      3. Start with 3 FREE Drops!<br>
       4. Deposit via Lightning to keep playing.
     </p>
     <button class="modal-btn" onclick="startGame()" data-i18n="start_game">START GAME</button>
@@ -369,7 +369,7 @@ const i18n = {
     play: "⚡ PLAY", stop: "⏹ STOP", auto_start: "⟳ AUTO START",
     recent: "Recent", top_wins: "Top Wins",
     how_to_title: "HOW TO PLAY",
-    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 10 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
+    how_to_desc: "1. Select your bet amount.<br>2. Drop the ball & hit multipliers.<br>3. Start with 3 FREE Drops!<br>4. Deposit via Lightning to keep playing.",
     start_game: "START GAME",
     wallet: "WALLET", deposit_desc: "⚡ DEPOSIT SATS TO PLAY",
     modal_title: "⚡ PAY TO DEPOSIT", tap_qr: "Tap QR to open wallet",
@@ -389,7 +389,7 @@ const i18n = {
     play: "⚡ プレイ", stop: "⏹ 停止", auto_start: "⟳ オート開始",
     recent: "最近の履歴", top_wins: "トップ勝利",
     how_to_title: "遊び方",
-    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回10回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
+    how_to_desc: "1. 賭け額を選びます。<br>2. ボールを落として倍率を狙え！<br>3. 初回3回の無料プレイ付き✨<br>4. ライトニングでSatsを入金して遊べます。",
     start_game: "ゲーム開始",
     wallet: "ウォレット", deposit_desc: "⚡ 遊ぶためのSATSを入金",
     modal_title: "⚡ 入金するには支払いを", tap_qr: "QRタップでウォレットを開く",
@@ -409,7 +409,7 @@ const i18n = {
     play: "⚡ 플레이", stop: "⏹ 정지", auto_start: "⟳ 자동 시작",
     recent: "최근 기록", top_wins: "최고 승리",
     how_to_title: "게임 방법",
-    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 무료 10회 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
+    how_to_desc: "1. 배팅액을 선택하세요.<br>2. 공을 떨어뜨려 배수를 노리세요!<br>3. 초기 무료 3회 플레이 제공✨<br>4. 라이트닝으로 입금하여 계속 즐기세요.",
     start_game: "게임 시작",
     wallet: "지갑", deposit_desc: "⚡ 플레이할 SATS 입금",
     modal_title: "⚡ 입금 결제", tap_qr: "QR 탭하여 지갑 열기",
@@ -542,19 +542,19 @@ function shareOnX() {
     if (isJackpot) {
       text = `🎰 PLINKOで大当たり！⚡️\n${lastWin.toLocaleString()} SATS ゲット💖\n\nキラキラ光るSatsの雨が最高に気持ちいい💸✨\nみんなもビットコイン稼いでみない？👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回無料10プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 PLINKO Lightning Sats で遊んでるよ！⚡️\n\nボールを落としてSatsを増やそう💸💖\n初回無料3プレイ付き✨ 一緒にあそぼっ👇\n#Bitcoin #LightningNetwork`;
     }
   } else if (currentLang === 'ko') {
     if (isJackpot) {
       text = `🎰 플링코에서 대박 터졌어요!⚡️\n${lastWin.toLocaleString()} SATS 획득💖\n\n반짝이는 Sats 비가 내리니 기분 최고💸✨\n같이 비트코인 모아볼래요?👇\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 무료 10회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 플링코 라이트닝 삿츠 플레이 중!⚡️\n\n공을 떨어뜨려 Sats를 늘려보세요💸💖\n초기 무료 3회 플레이 제공✨ 같이 놀아요👇\n#Bitcoin #LightningNetwork`;
     }
   } else {
     if (isJackpot) {
       text = `🎰 Just made it rain ${lastWin.toLocaleString()} SATS on Plinko! ⚡️💸\n\nDropping balls and stacking sats feels too good. Who's next? 👇💖\n#Bitcoin #LightningNetwork`;
     } else {
-      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 10 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
+      text = `🎰 Playing PLINKO Lightning Sats! ⚡️💸\n\nDrop balls and stack your sats. Start with 3 FREE drops✨ Come play👇\n#Bitcoin #LightningNetwork`;
     }
   }
 
@@ -716,7 +716,8 @@ const SLOT_COL =['#0affee','#4cd964','#ffaa00','#ff7700','#ff9944','#ff5533','#f
 // ── STATE ──────────────────────────────────────────────────────
 let balance    = parseInt(localStorage.getItem('plinko_balance') || '0');
 let storedFree = localStorage.getItem('plinko_freeDrops');
-let freeDrops  = storedFree !== null ? parseInt(storedFree) : 10;
+// 初回無料ドロップ数を 3 に変更
+let freeDrops  = storedFree !== null ? parseInt(storedFree) : 3;
 let sessionWon = 0;
 let totalDrops = 0;
 let currentBet = 100;
